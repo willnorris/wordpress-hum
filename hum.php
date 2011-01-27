@@ -1,6 +1,6 @@
 <?php
 /*
- Plugin Name: hum
+ Plugin Name: Hum
  Plugin URI: http://github.com/willnorris/wordpress-hum
  Description: Whistle inspired URL shortener for WordPress
  Author: Will Norris
@@ -90,6 +90,17 @@ function hum_rewrite_rules( $wp_rewrite ) {
   $wp_rewrite->rules = $hum_rules + $wp_rewrite->rules;
 }
 add_action('generate_rewrite_rules', 'hum_rewrite_rules');
+
+
+/**
+ * Flush wp_rewrite rules.
+ */
+function hum_flush_rewrite_rules() {
+  global $wp_rewrite;
+  $wp_rewrite->flush_rules();
+}
+register_activation_hook(__FILE__, 'hum_flush_rewrite_rules');
+register_deactivation_hook(__FILE__, 'hum_flush_rewrite_rules');
 
 
 /**
