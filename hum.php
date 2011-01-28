@@ -48,8 +48,8 @@ function hum_redirect_local( $type, $id ) {
 
   if ( in_array($type, $local_types) ) {
     $p = sxg_to_num( $id );
-    $redirect = add_query_arg( 'p', $p, home_url() );
-    wp_redirect( $redirect, 301 );
+    $permalink = get_permalink($p);
+    wp_redirect( $permalink, 301 );
     exit;
   }
 }
