@@ -57,6 +57,32 @@ add_filter('hum_request', 'hum_redirect_local', 20, 2);
 
 
 /**
+ *
+ */
+function hum_request_i( $path ) {
+  list($subtype, $id) = preg_split('|/|', $path, 2);
+  do_action("hum_request_i_{$subtype}", $id);
+  switch ($subtype) {
+    case 'a':
+    case 'asin':
+    case 'i':
+    case 'isbn':
+      $amazon_id = apply_filters('amazon_affiliate_id', false);
+      if ($amazon_id) {
+        wp_redirect('http://www.amazon.com/gp/redirect.html?ie=UTF8&location='
+          . 'http%3A%2F%2Fwww.amazon.com%2Fdp%2F' . $id . '&tag=' . $amazon_id
+          . '&linkCode=ur2&camp=1789&creative=9325');
+      } else {
+        wp_redirect('http://www.amazon.com/dp/' . $id );
+      }
+      exit;
+      break;
+  }
+}
+add_filter('hum_request_i', 'hum_request_i', 20);
+
+
+/**
  * Allow for simple redirect rules for shortlink prefixes.  Users can provide a
  * filter to perform simple URL redirect for a given type prefix.  For example,
  * to redirect all /w/ shortlinks to your personal PBworks wiki, you could use:
