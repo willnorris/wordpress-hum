@@ -110,7 +110,7 @@ add_action('hum_request', 'hum_redirect_request', 30, 2);
  */
 function hum_rewrite_rules( $wp_rewrite ) {
   $hum_rules = array(
-		'([a-z]/.+)' => 'index.php?hum=$matches[1]',
+		'([a-z](/.*)?$)' => 'index.php?hum=$matches[1]',
   );
 
   $wp_rewrite->rules = $hum_rules + $wp_rewrite->rules;
