@@ -32,6 +32,11 @@ function hum_parse_request( $wp ) {
     list($type, $id) = explode('/', $wp->query_vars['hum'], 2);
     do_action("hum_request_{$type}", $id);
     do_action('hum_request', $type, $id);
+
+    // hum didn't handle request, so issue 404.
+    // manually setting query vars like this feels very fragile, but
+    // $wp_query->set_404() doesn't do what we need here.
+    $wp->query_vars['error'] = '404';
   }
 }
 add_action('parse_request', 'hum_parse_request');
@@ -49,8 +54,11 @@ function hum_redirect_local( $type, $id ) {
   if ( in_array($type, $local_types) ) {
     $p = sxg_to_num( $id );
     $permalink = get_permalink($p);
-    wp_redirect( $permalink, 301 );
-    exit;
+
+    if ( $permalink ) {
+      wp_redirect( $permalink, 301 );
+      exit;
+    }
   }
 }
 add_filter('hum_request', 'hum_redirect_local', 20, 2);
