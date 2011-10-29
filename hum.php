@@ -46,10 +46,13 @@ add_action('parse_request', 'hum_parse_request');
  * Redirect shortlinks that are for content hosted directly within WordPress.
  * The 'id' portion of these URLs is expected to be the sexagesimal post ID.
  *
+ * @uses apply_filters() Calls 'hum_local_types' filter on prefixes for local
+ *     WordPress hosted content
  * @param string $code the content-type prefix
  */
 function hum_redirect_local( $type, $id ) {
   $local_types = array('b', 't');
+  $local_types = apply_filters('hum_local_types', $local_types);
 
   if ( in_array($type, $local_types) ) {
     $p = sxg_to_num( $id );
@@ -65,7 +68,12 @@ add_filter('hum_request', 'hum_redirect_local', 20, 2);
 
 
 /**
+ * Handles /i/ URLs that have ISBN or ASIN subpaths by redirecting to Amazon.
  *
+ * @uses do_action() Calls 'hum_request_i_{$subtype}' action
+ * @uses apply_filters() Calls 'amazon_affiliate_id' filter
+ *
+ * @param string $path subpath of URL (after /i/)
  */
 function hum_request_i( $path ) {
   list($subtype, $id) = preg_split('|/|', $path, 2);
