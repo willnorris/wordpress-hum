@@ -1,1 +1,109 @@
 # Hum
+
+Hum is a personal URL shortener for WordPress,  It is modelled after
+[Whistle][], [Tantek Celik][]'s URL shortener.  Hum is not designed as a general
+purpose URL shortener along the lines of [bit.ly][] or [goo.gl][].  Rather, it
+is intended as a personal shortener for your own content.
+
+[Whistle]: http://ttk.me/w/Whistle
+[Tantek Celik]: http://tantek.com/
+[bit.ly]: http://bit.ly/
+[goo.gl]: http://goo.gl/
+
+
+## What Hum Does
+
+Hum is designed to provide short URLs for your WordPress hosted content (blog
+posts, statuses, etc), as well as content that you host elsewhere.  It uses URLs
+of the form: `/{type}/{id}` where `{type}` is a single letter identifier and
+`{id}` identifies the individual piece of content.  Some types additionally have
+a sub-type.  Out of the box, Hum supports:
+
+ - b - blog post
+ - i - identifier on another system
+ - t - status update
+
+For the 'b' and 't' types, the ID is the [NewBase60][] encoded WordPress post
+ID.  For example, a blog post with a post ID of 918 would have a short URL with
+a path of '/b/FJ'.  Hum will instruct WordPress to use this as the shortlink for
+the post.
+
+The 'i' type has four subtypes, all of which redirect to Amazon.com:
+
+ - asin or a
+ - isbn or i
+
+Other types can be registered to serve WordPress hosted content or to redirect
+to an external service.
+
+[NewBase60]: http://ttk.me/w/NewBase60
+
+
+## Using Hum
+
+Installing Hum will immediately register the types described above.  By
+default, it will use your main domain for the shortlinks.  If you have a
+different domain you'd like to use for these shortlinks, implement the 
+`hum_shortlink_base` filter.  That might look something like:
+
+    add_filter('hum_shortlink_base', create_function('', 'return "http://wjn.me/";'));
+
+You will probably want to setup this domain to send all traffic to your main
+domain so that Hum can then handle all of the traffic.  If you are using
+Apache, you might add something like the following your `.htaccess` file:
+
+    RewriteEngine On
+    RewriteBase
+    RewriteRule (.*) http://domain.com/$1 [L,R=permanent]
+
+
+## Extending Hum
+
+### Adding your Amazon Affiliate ID
+
+If you'd like to include your Amazone Affiliate ID in the /i/ redirect URLs, 
+implement the `amazon_affiliate_id` filter.  For example:
+
+    add_filter('amazon_affiliate_id', create_function('', 'return "willnorris-20";'));
+
+
+### Additional Local Types
+
+Out of the box, Hum only registers the 'b' and 't' prefix to be served locally
+by WordPress.  If you would like to register additional prefixes, implement the
+`hum_local_types` filter.  For example, to include 'p' as well for photos:
+
+    function myplugin_hum_local_types( $types ) {
+      $types[] = 'p';
+      return $types;
+    }
+    add_filter('hum_local_types', 'myplugin_hum_local_types');
+
+This will tell Hum to server any `/p/{id}` URLs from WordPress.  Additionally,
+you'll want to instruct Hum to use your prefix for whatever that particularly
+content type.  Here, we're registering 'p' which is normally used for photos.
+
+    function myplugin_hum_type_prefix( $prefix, $post_id ) {
+      $post = get_post( $post_id );
+
+      if ( $post->post_type == 'attachment' &&
+           strpos($post->post_mime_type, 'image') === 0 ) {
+        $prefix = 'p';
+      }
+
+      return $prefix;
+    }
+    add_filter('hum_type_prefix', 'myplugin_hum_type_prefix', 10, 2);
+
+
+### Simple Redirect
+
+You can redirect all traffic for a prefix using a single line of PHP my
+implementing the `hum_redirect_base_{type}` filter where `{type}` is the prefix
+to redirect.  For example, I redirect all /w/ URLs to wiki.willnorris.com
+using:
+
+    add_filter('hum_redirect_base_w', create_function('', 'return "http://wiki.willnorris.com/";'));
+
+
+
