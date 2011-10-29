@@ -17,7 +17,15 @@ Hum is designed to provide short URLs for your WordPress hosted content (blog
 posts, statuses, etc), as well as content that you host elsewhere.  It uses URLs
 of the form: `/{type}/{id}` where `{type}` is a single letter identifier and
 `{id}` identifies the individual piece of content.  Some types additionally have
-a sub-type.  Out of the box, Hum supports:
+a sub-type.  
+
+For example:
+
+ - <http://wjn.me/b/FJ> => <http://willnorris.com/2011/01/hum-personal-url-shortener-wordpress>
+ - <http://wjn.me/w/hum> => <http://wiki.willnorris.com/hum>
+ - <http://wjn.me/i/a/B003QP4NPE> => <http://www.amazon.com/dp/B003QP4NPE>
+
+Out of the box, Hum supports the following prefixes:
 
  - b - blog post
  - i - identifier on another system
@@ -33,7 +41,7 @@ The 'i' type has four subtypes, all of which redirect to Amazon.com:
  - asin or a
  - isbn or i
 
-Other types can be registered to serve WordPress hosted content or to redirect
+Other type prefixes can be registered to serve WordPress hosted content or to redirect
 to an external service.
 
 [NewBase60]: http://ttk.me/w/NewBase60
