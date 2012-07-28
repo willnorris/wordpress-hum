@@ -61,7 +61,7 @@ domain so that Hum can then handle all of the traffic.  If you are using
 Apache, you might add something like the following your `.htaccess` file:
 
     RewriteEngine On
-    RewriteBase
+    RewriteBase /
     RewriteRule (.*) http://domain.com/$1 [L,R=permanent]
 
 
