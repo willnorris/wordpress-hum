@@ -163,7 +163,7 @@ function hum_shortlink_base() {
  * @param string $link the current shortlink for the post
  * @param int $id post ID
  * @param string $context
- * @param boolean $allow_alugs
+ * @param boolean $allow_slugs
  * @return string
  */
 function hum_get_shortlink($link, $id, $context, $allow_slugs) {
