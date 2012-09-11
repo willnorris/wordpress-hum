@@ -147,13 +147,20 @@ register_deactivation_hook(__FILE__, 'hum_flush_rewrite_rules');
 
 /**
  * Get the base URL for hum shortlinks.  Defaults to the WordPress home url.
- * Users can provide a filter to use a custom domain for shortlinks.
+ * Users can define HUM_SHORTLINK_BASE or provide a filter to use a custom
+ * domain for shortlinks.
  *
  * @uses apply_filters() Calls 'hum_shortlink_base' filter on base URL
  * @return string
  */
 function hum_shortlink_base() {
-  return apply_filters( 'hum_shortlink_base', home_url() );
+  if ( defined('HUM_SHORTLINK_BASE') ) {
+    $base = HUM_SHORTLINK_BASE;
+  } else {
+    $base = home_url();
+  }
+
+  return apply_filters( 'hum_shortlink_base', $base );
 }
 
 
