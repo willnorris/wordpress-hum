@@ -2,11 +2,11 @@
 /*
  Plugin Name: Hum
  Plugin URI: http://github.com/willnorris/wordpress-hum
- Description: Whistle inspired URL shortener for WordPress
+ Description: Personal URL shortener for WordPress
  Author: Will Norris
  Author URI: http://willnorris.com/
  Version: 1.0
- License: Dual GPL (http://www.fsf.org/licensing/licenses/info/GPLv2.html) and Modified BSD (http://www.fsf.org/licensing/licenses/index_html#ModifiedBSD)
+ License: MIT (http://opensource.org/licenses/MIT)
  Text Domain: hum
  */
 
