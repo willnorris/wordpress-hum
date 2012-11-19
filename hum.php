@@ -33,6 +33,14 @@ function hum_parse_request( $wp ) {
     do_action("hum_request_{$type}", $id);
     do_action('hum_request', $type, $id);
 
+    // hum hasn't handled the request yet, so try again but strip common
+    // punctuation that might appear after a URL in written text: . , )
+    $clean_id = preg_replace('/[\.,\)]+$/', '', $id);
+    if ($id != $clean_id) {
+      do_action("hum_request_{$type}", $clean_id);
+      do_action('hum_request', $type, $clean_id);
+    }
+
     // hum didn't handle request, so issue 404.
     // manually setting query vars like this feels very fragile, but
     // $wp_query->set_404() doesn't do what we need here.
