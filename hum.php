@@ -11,6 +11,11 @@
  */
 
 
+// if you have hum installed, then you probably actually care about short
+// links, so we'll add it to the admin menu bar.
+add_action('admin_bar_menu', 'wp_admin_bar_shortlink_menu', 90);
+
+
 /**
  * Accept hum query variables.
  */
