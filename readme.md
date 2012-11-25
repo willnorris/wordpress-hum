@@ -14,12 +14,10 @@ Personal URL shortener for WordPress
 
 Hum is a personal URL shortener for WordPress, designed to provide short URLs
 to your personal content, both hosted on WordPress and elsewhere.  For example,
-rather than a long URL for a WordPress post such as:
-
-    http://willnorris.com/2011/01/hum-personal-url-shortener-wordpress
-
-you could have a short URL like <http://willnorris.com/b/FJ>.  Additional, if
-you have a custom domain for short URLs, you can shorten things further like
+rather than a long URL for a WordPress post such as
+<http://willnorris.com/2011/01/hum-personal-url-shortener-wordpress>, you could
+have a short URL like <http://willnorris.com/b/FJ>.  Additional, if you have a
+custom domain for short URLs, you can shorten things further like
 <http://wjn.me/b/FJ>.
 
 WordPress post IDs are shorted using the [NewBase60][] encoding scheme which is
@@ -107,9 +105,9 @@ by WordPress.  If you would like to register additional prefixes, implement the
     }
     add_filter('hum_local_types', 'myplugin_hum_local_types');
 
-This will tell Hum to server any `/p/{id}` URLs from WordPress.  Additionally,
-you'll want to instruct Hum to use your prefix for whatever that particularly
-content type.  Here, we're registering 'p' which is normally used for photos.
+This will tell Hum to serve any `/p/{id}` URLs from WordPress.  Additionally,
+you'll want to instruct Hum to use your prefix for that particular content
+type.  Here, we're registering 'p' which is normally used for photos.
 
     function myplugin_hum_type_prefix( $prefix, $post_id ) {
       $post = get_post( $post_id );
