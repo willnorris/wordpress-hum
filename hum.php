@@ -5,7 +5,7 @@
  Description: Personal URL shortener for WordPress
  Author: Will Norris
  Author URI: http://willnorris.com/
- Version: 1.0
+ Version: 1.1
  License: MIT (http://opensource.org/licenses/MIT)
  Text Domain: hum
  */
