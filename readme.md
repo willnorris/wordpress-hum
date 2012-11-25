@@ -138,6 +138,7 @@ Project maintined on github at
 [willnorris/wordpress-hum](https://github.com/willnorris/wordpress-hum).
 
 ### 1.1 ###
+
  - allow custom domain to be configured using `HUM_SHORTLINK_BASE` constant or
    via the General Settings admin page.
  - strip some punctuation at the end of URLs (see [#4][])
@@ -148,6 +149,8 @@ Project maintined on github at
  - add new `hum_local_types` filter for registering other prefixes thatt are
    served locally by WordPress
  - reduce extra redirect for local content
+
+[full changelog](https://github.com/willnorris/wordpress-hum/compare/1.0...1.1)
 
 [#1]: https://github.com/willnorris/wordpress-hum/issues/1
 [#2]: https://github.com/willnorris/wordpress-hum/issues/2
