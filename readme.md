@@ -20,20 +20,20 @@ have a short URL like <http://willnorris.com/b/FJ>.  Additional, if you have a
 custom domain for short URLs, you can shorten things further like
 <http://wjn.me/b/FJ>.
 
-WordPress post IDs are shorted using the [NewBase60][] encoding scheme which is
+WordPress post IDs are shortened using the [NewBase60][] encoding scheme which is
 specifically optimized for brevity and readability, with built-in error
 correction for commonly confused characters like '1', 'l', and 'I'.
 
 Hum is not designed as a general purpose URL shortener along the lines of
 <http://bit.ly> or <http://goo.gl>.  Rather, it is specifically intended as a
-personal shortener for your own content.  Read more about this at [Tantek
-Celik][]'s page for [Whistle][], which served as the inspiration for Hum.
+personal shortener for your own content.
 
-[bit.ly]: http://bit.ly/
-[goo.gl]: http://goo.gl/
+Read more about the reasoning for a personal URL shortener at [Tantek Celik][]'s
+page for [Whistle][], which served as the inspiration for Hum.
+
+[NewBase60]: http://ttk.me/w/NewBase60
 [Tantek Celik]: http://tantek.com/
 [Whistle]: http://ttk.me/w/Whistle
-[NewBase60]: http://ttk.me/w/NewBase60
 
 
 ## Installation ##
@@ -65,7 +65,7 @@ WordPress.  Most shortlinks will use the `b` type prefix, with the exception of
 posts with a 'status' [post format][], which have shortlinks using the `t` type
 prefix.  For example:
 
- - <http://wjn.ly/b/FJ>
+ - <http://wjn.me/b/FJ>
  - <http://wjn.me/t/FR>
 
 Additionally, the `i` type prefix, along with one of four subtypes, is
