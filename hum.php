@@ -64,7 +64,7 @@ add_action('parse_request', 'hum_parse_request');
  * @param string $code the content-type prefix
  */
 function hum_redirect_local( $type, $id ) {
-  $local_types = array('b', 't');
+  $local_types = array('b', 't', 'a', 'p');
   $local_types = apply_filters('hum_local_types', $local_types);
 
   if ( in_array($type, $local_types) ) {
@@ -234,12 +234,18 @@ function hum_type_prefix( $post ) {
 
   $post_format = get_post_format( $post );
   switch($post_format) {
-    case 'aside': 
+    case 'aside':
+    case 'status':
+    case 'link':
       $prefix = 't'; break;
-    case 'status': 
-      $prefix = 't'; break;
+    case 'audio':
+    case 'video':
+      $prefix = 'a'; break;
+    case 'photo':
+    case 'gallery':
+      $prefix = 'p'; break;
   }
-
+  
   return apply_filters('hum_type_prefix', $prefix, $post);
 }
 
