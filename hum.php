@@ -287,7 +287,7 @@ function hum_admin_shortlink_base() {
 // New Base 60 - see http://ttk.me/w/NewBase60
 //
 // slightly modified from Cassis Project (http://cassisproject.com/)
-// Copyright 2010 Tantek Çelik, released under Creative Commons by-sa 3.0
+// Copyright 2010 Tantek Çelik, used with permission under CC0 license (http://git.io/tZ8fjw)
 
 if ( !function_exists( 'num_to_sxg' ) ):
 /**
