@@ -29,8 +29,10 @@ add_action('query_vars', 'hum_query_vars');
 /**
  * Parse request for shortlink.
  *
- * @uses do_action() Calls 'hum_request_{$type}" action
- * @uses do_action() Calls 'hum_request" action
+ * @uses do_action() Calls 'hum_request_{$type}' action
+ * @uses do_action() Calls 'hum_request' action
+ *
+ * @param WP $wp the WordPress environment for the request
  */
 function hum_parse_request( $wp ) {
   if ( array_key_exists( 'hum', $wp->query_vars ) ) {
@@ -61,7 +63,9 @@ add_action('parse_request', 'hum_parse_request');
  *
  * @uses apply_filters() Calls 'hum_local_types' filter on prefixes for local
  *     WordPress hosted content
- * @param string $code the content-type prefix
+ *
+ * @param string $type the content-type prefix
+ * @param string $id the requested post ID
  */
 function hum_redirect_local( $type, $id ) {
   $local_types = array('b', 't', 'a', 'p');
@@ -98,9 +102,9 @@ function hum_request_i( $path ) {
     case 'isbn':
       $amazon_id = apply_filters('amazon_affiliate_id', false);
       if ($amazon_id) {
-        wp_redirect('http://www.amazon.com/gp/redirect.html?ie=UTF8&location='
-          . 'http%3A%2F%2Fwww.amazon.com%2Fdp%2F' . $id . '&tag=' . $amazon_id
-          . '&linkCode=ur2&camp=1789&creative=9325');
+        wp_redirect('http://www.amazon.com/gp/redirect.html?ie=UTF8&location=' .
+            'http%3A%2F%2Fwww.amazon.com%2Fdp%2F' . $id . '&tag=' . $amazon_id .
+            '&linkCode=ur2&camp=1789&creative=9325');
       } else {
         wp_redirect('http://www.amazon.com/dp/' . $id );
       }
@@ -116,10 +120,13 @@ add_filter('hum_request_i', 'hum_request_i', 20);
  * filter to perform simple URL redirect for a given type prefix.  For example,
  * to redirect all /w/ shortlinks to your personal PBworks wiki, you could use:
  *
- *   add_filter('hum_redirect_base_w', 
+ *   add_filter('hum_redirect_base_w',
  *     create_function('', 'return "http://willnorris.pbworks.com/";'));
  *
  * @uses apply_filters() Calls 'hum_redirect_base_{$type}' filter on redirect base URL
+ *
+ * @param string $type the content-type prefix
+ * @param string $id the requested post ID
  */
 function hum_redirect_request( $type, $id ) {
   $url = apply_filters("hum_redirect_base_{$type}", false);
@@ -135,11 +142,11 @@ add_action('hum_request', 'hum_redirect_request', 30, 2);
 /**
  * Add rewrite rules for hum shortlinks.
  *
- * @param object $wp_rewrite
+ * @param WP_Rewrite $wp_rewrite WordPress rewrite component.
  */
 function hum_rewrite_rules( $wp_rewrite ) {
   $hum_rules = array(
-		'([a-z](/.*)?$)' => 'index.php?hum=$matches[1]',
+    '([a-z](/.*)?$)' => 'index.php?hum=$matches[1]',
   );
 
   $wp_rewrite->rules = $hum_rules + $wp_rewrite->rules;
@@ -164,6 +171,7 @@ register_deactivation_hook(__FILE__, 'hum_flush_rewrite_rules');
  * domain for shortlinks.
  *
  * @uses apply_filters() Calls 'hum_shortlink_base' filter on base URL
+ *
  * @return string
  */
 function hum_shortlink_base() {
@@ -266,7 +274,8 @@ add_action('admin_init', 'hum_admin_init');
  * Add admin settings fields for Hum.
  */
 function hum_admin_menu() {
-  add_settings_field('hum_shortlink_base', __('Shortlink Base (URL)', 'hum'), 'hum_admin_shortlink_base', 'general');
+  add_settings_field('hum_shortlink_base', __('Shortlink Base (URL)', 'hum'),
+      'hum_admin_shortlink_base', 'general');
 }
 add_action('admin_menu', 'hum_admin_menu');
 
@@ -276,7 +285,10 @@ add_action('admin_menu', 'hum_admin_menu');
  */
 function hum_admin_shortlink_base() {
 ?>
-  <input name="hum_shortlink_base" type="text" id="hum_shortlink_base" value="<?php form_option('hum_shortlink_base'); ?>"<?php disabled( defined( 'HUM_SHORTLINK_BASE') ); ?> class="regular-text code<?php if ( defined( 'HUM_SHORTLINK_BASE') ) echo ' disabled' ?>" />
+  <input name="hum_shortlink_base" type="text" id="hum_shortlink_base"
+      value="<?php form_option('hum_shortlink_base'); ?>"
+      <?php disabled( defined( 'HUM_SHORTLINK_BASE') ); ?>
+      class="regular-text code<?php if ( defined( 'HUM_SHORTLINK_BASE') ) echo ' disabled' ?>" />
   <p class="description">
     If you have a custom domain you want to use for shortlinks, enter the address here.
   </p>
@@ -284,7 +296,7 @@ function hum_admin_shortlink_base() {
   <script>
     // move adjacent to other URL properties
     jQuery('input#hum_shortlink_base').parents('tr')
-      .insertAfter( jQuery('input#home').parents('tr') );
+        .insertAfter( jQuery('input#home').parents('tr') );
   </script>
 <?php
 }
@@ -337,3 +349,4 @@ function sxg_to_num($s) {
   return $n;
 }
 endif;
+
