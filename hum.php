@@ -64,7 +64,7 @@ add_action('parse_request', 'hum_parse_request');
  * @param string $code the content-type prefix
  */
 function hum_redirect_local( $type, $id ) {
-  $local_types = array('b', 't');
+  $local_types = array('b', 't', 'a', 'p', 'h');
   $local_types = apply_filters('hum_local_types', $local_types);
 
   if ( in_array($type, $local_types) ) {
@@ -140,6 +140,7 @@ add_action('hum_request', 'hum_redirect_request', 30, 2);
 function hum_rewrite_rules( $wp_rewrite ) {
   $hum_rules = array(
 		'([a-z](/.*)?$)' => 'index.php?hum=$matches[1]',
+    //'([0-9]+$)' => 'index.php?p=$matches[1]',
   );
 
   $wp_rewrite->rules = $hum_rules + $wp_rewrite->rules;
@@ -238,8 +239,16 @@ function hum_type_prefix( $post ) {
       $prefix = 't'; break;
     case 'status': 
       $prefix = 't'; break;
+    case 'audio':
+    case 'video':
+      $prefix = 'a'; break;
+    case 'photo':
+    case 'gallery':
+      $prefix = 'p'; break;
+    case 'link':
+      $prefix = 'h'; break;
   }
-
+  
   return apply_filters('hum_type_prefix', $prefix, $post);
 }
 
