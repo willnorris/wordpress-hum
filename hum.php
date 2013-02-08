@@ -162,7 +162,6 @@ class Hum {
    * @param WP_Rewrite $wp_rewrite WordPress rewrite component.
    */
   function rewrite_rules( $wp_rewrite ) {
-    error_log('rewriting rules');
     $hum_rules = array(
       '([a-z](/.*)?$)' => 'index.php?hum=$matches[1]',
     );
