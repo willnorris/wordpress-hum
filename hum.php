@@ -252,6 +252,7 @@ class Hum {
           $prefix = 'a'; break;
         case 'photo':
         case 'gallery':
+        case 'image':
           $prefix = 'p'; break;
     }
 
