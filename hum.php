@@ -49,7 +49,7 @@ class Hum {
   /**
    * Accept hum query variables.
    */
-  function query_vars( $vars ) {
+  public function query_vars( $vars ) {
     $vars[] = 'hum';
     return $vars;
   }
@@ -62,7 +62,7 @@ class Hum {
    *
    * @param WP $wp the WordPress environment for the request
    */
-  function parse_request( $wp ) {
+  public function parse_request( $wp ) {
     if ( array_key_exists( 'hum', $wp->query_vars ) ) {
       $hum_path = $wp->query_vars['hum'];
       if ( strpos($hum_path, '/') !== false ) {
@@ -122,7 +122,7 @@ class Hum {
    *
    * @param string $path subpath of URL (after /i/)
    */
-  function redirect_request_i( $path ) {
+  public function redirect_request_i( $path ) {
     list($subtype, $id) = preg_split('|/|', $path, 2);
     do_action("hum_request_i_{$subtype}", $id);
     switch ($subtype) {
@@ -156,7 +156,7 @@ class Hum {
    * @param string $type the content-type prefix
    * @param string $id the requested post ID
    */
-  function redirect_request( $type, $id ) {
+  public function redirect_request( $type, $id ) {
     $url = apply_filters("hum_redirect_base_{$type}", false);
     if ( $url ) {
       $url = trailingslashit($url) . $id;
@@ -170,7 +170,7 @@ class Hum {
    *
    * @param WP_Rewrite $wp_rewrite WordPress rewrite component.
    */
-  function rewrite_rules( $wp_rewrite ) {
+  public function rewrite_rules( $wp_rewrite ) {
     $hum_rules = array(
       '([a-z](/.*)?$)' => 'index.php?hum=$matches[1]',
     );
@@ -187,7 +187,7 @@ class Hum {
    *
    * @return string
    */
-  function shortlink_base() {
+  public function shortlink_base() {
     $base = get_option('hum_shortlink_base');
     if ( empty( $base ) ) {
       $base = home_url();
@@ -198,7 +198,7 @@ class Hum {
   /**
    * Allow the constant named 'HUM_SHORTLINK_BASE' to override the base URL for shortlinks.
    */
-  function config_shortlink_base( $url = '' ) {
+  public function config_shortlink_base( $url = '' ) {
     if ( defined( 'HUM_SHORTLINK_BASE') ) {
       return untrailingslashit( HUM_SHORTLINK_BASE );
     }
@@ -214,7 +214,7 @@ class Hum {
    * @param boolean $allow_slugs
    * @return string
    */
-  function get_shortlink($link, $id, $context, $allow_slugs) {
+  public function get_shortlink($link, $id, $context, $allow_slugs) {
     $post_id = 0;
     if ( 'query' == $context ) {
       if ( is_front_page() ) {
@@ -245,7 +245,7 @@ class Hum {
    * @param int|object $post A post
    * @return string the content type prefix for the post
    */
-  function type_prefix( $post ) {
+  public function type_prefix( $post ) {
     $prefix = 'b';
 
     $post_format = get_post_format( $post );
@@ -272,7 +272,7 @@ class Hum {
    *
    * @uses do_action() Calls 'hum_legacy_id' with the post ID and shortlink path.
    */
-  function legacy_redirect() {
+  public function legacy_redirect() {
     if ( is_404() ) {
       global $wp;
       $post_id = apply_filters('hum_legacy_id', 0, $wp->request);
@@ -295,7 +295,7 @@ class Hum {
    *
    * @return string ID of post to redirect to
    */
-  function legacy_ftl_id($id, $path) {
+  public function legacy_ftl_id($id, $path) {
     if ( is_numeric($path) ) {
       $post = get_post($path);
     } else {
@@ -316,14 +316,14 @@ class Hum {
   /**
    * Register admin settings for Hum.
    */
-  function admin_init() {
+  public function admin_init() {
     register_setting('general', 'hum_shortlink_base');
   }
 
   /**
    * Add admin settings fields for Hum.
    */
-  function admin_menu() {
+  public function admin_menu() {
     add_settings_field('hum_shortlink_base', __('Shortlink Base (URL)', 'hum'),
         array( $this, 'admin_shortlink_base'), 'general');
   }
@@ -331,7 +331,7 @@ class Hum {
   /**
    * Admin UI for setting the shortlink base URL.
    */
-  function admin_shortlink_base() {
+  public function admin_shortlink_base() {
   ?>
     <input name="hum_shortlink_base" type="text" id="hum_shortlink_base"
         value="<?php form_option('hum_shortlink_base'); ?>"
