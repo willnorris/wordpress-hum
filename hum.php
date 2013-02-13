@@ -31,7 +31,6 @@ class Hum {
 
     add_action('query_vars', array( $this, 'query_vars' ));
     add_action('parse_request', array( $this, 'parse_request' ));
-    add_filter('hum_request', array( $this, 'redirect_local' ), 20, 2);
     add_action('hum_request', array( $this, 'redirect_request' ), 30, 2);
     add_filter('hum_request_i', array( $this, 'redirect_request_i' ), 20);
     add_action('generate_rewrite_rules', array( $this, 'rewrite_rules' ));
@@ -55,9 +54,9 @@ class Hum {
   }
 
   /**
-   * Parse request for shortlink.
+   * Parse request for shortlink.  This is the main entry point for handling
+   * short URLs.
    *
-   * @uses do_action() Calls 'hum_request_{$type}' action
    * @uses do_action() Calls 'hum_request' action
    *
    * @param WP $wp the WordPress environment for the request
@@ -71,14 +70,12 @@ class Hum {
         $type = $hum_path;
         $id = null;
       }
-      do_action("hum_request_{$type}", $id);
       do_action('hum_request', $type, $id);
 
       // hum hasn't handled the request yet, so try again but strip common
       // punctuation that might appear after a URL in written text: . , )
       $clean_id = preg_replace('/[\.,\)]+$/', '', $id);
       if ($id != $clean_id) {
-        do_action("hum_request_{$type}", $clean_id);
         do_action('hum_request', $type, $clean_id);
       }
 
@@ -90,27 +87,61 @@ class Hum {
   }
 
   /**
-   * Redirect shortlinks that are for content hosted directly within WordPress.
-   * The 'id' portion of these URLs is expected to be the sexagesimal post ID.
+   * Get the short URL types that are handled locally by WordPress.
    *
-   * @uses apply_filters() Calls 'hum_local_types' filter on prefixes for local
-   *     WordPress hosted content
+   * @uses apply_filters() Calls 'hum_local_types' with array of local types
+   *
+   * @return array local types
+   */
+  public function local_types() {
+    $local_types = array('b', 't', 'a', 'p');
+    return apply_filters('hum_local_types', $local_types);
+  }
+
+  /**
+   * Attempt to handle redirect for the current shortlink.
+   *
+   * This redirects shortlinks that are for content hosted directly within
+   * WordPress. The 'id' portion of these URLs is expected to be the
+   * sexagesimal post ID.
+   *
+   * This also allows for simple redirect rules for shortlink prefixes.  Users
+   * can provide a filter to perform simple URL redirect for a given type
+   * prefix.  For example, to redirect all /w/ shortlinks to your personal
+   * PBworks wiki, you could use:
+   *
+   *   add_filter('hum_redirect_base_w',
+   *     create_function('', 'return "http://willnorris.pbworks.com/";'));
+   *
+   * @uses do_action() Calls 'hum_request_{$type}' action
+   * @uses apply_filters() Calls 'hum_redirect_base_{$type}' filter on redirect base URL
    *
    * @param string $type the content-type prefix
    * @param string $id the requested post ID
    */
-  function redirect_local( $type, $id ) {
-    $local_types = array('b', 't', 'a', 'p');
-    $local_types = apply_filters('hum_local_types', $local_types);
+  public function redirect_request( $type, $id ) {
+    do_action("hum_request_{$type}", $id);
 
+    // locally hosted content
+    $local_types = $this->local_types();
     if ( in_array($type, $local_types) ) {
       $p = sxg_to_num( $id );
-      $permalink = get_permalink($p);
-
-      if ( $permalink ) {
-        wp_redirect( $permalink, 301 );
-        exit;
+      if ( $p ) {
+        $url = get_permalink( $p );
       }
+    }
+
+    // simple redirects for entire base type
+    if ( !$url ) {
+      $url = apply_filters("hum_redirect_base_{$type}", false);
+      if ( $url ) {
+        $url = trailingslashit($url) . $id;
+      }
+    }
+
+    if ( $url ) {
+      wp_redirect( $url, 301 );
+      exit;
     }
   }
 
@@ -140,28 +171,6 @@ class Hum {
         }
         exit;
         break;
-    }
-  }
-
-  /**
-   * Allow for simple redirect rules for shortlink prefixes.  Users can provide a
-   * filter to perform simple URL redirect for a given type prefix.  For example,
-   * to redirect all /w/ shortlinks to your personal PBworks wiki, you could use:
-   *
-   *   add_filter('hum_redirect_base_w',
-   *     create_function('', 'return "http://willnorris.pbworks.com/";'));
-   *
-   * @uses apply_filters() Calls 'hum_redirect_base_{$type}' filter on redirect base URL
-   *
-   * @param string $type the content-type prefix
-   * @param string $id the requested post ID
-   */
-  public function redirect_request( $type, $id ) {
-    $url = apply_filters("hum_redirect_base_{$type}", false);
-    if ( $url ) {
-      $url = trailingslashit($url) . $id;
-      wp_redirect( $url );
-      exit;
     }
   }
 
