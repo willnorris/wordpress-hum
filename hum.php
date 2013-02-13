@@ -39,6 +39,7 @@ class Hum {
     add_filter('pre_get_shortlink', array( $this, 'get_shortlink' ), 10, 4);
     add_filter('template_redirect', array( $this, 'legacy_redirect' ));
     add_filter('hum_legacy_id', array( $this, 'legacy_ftl_id' ), 10, 2);
+    add_action('atom_entry', array( $this, 'shortlink_atom_entry' ));
 
     // Admin Settings
     add_action('admin_init', array( $this, 'admin_init' ));
@@ -340,6 +341,18 @@ class Hum {
           .insertAfter( jQuery('input#home').parents('tr') );
     </script>
   <?php
+  }
+  
+  /**
+   * Add shortlink <link /> to Atom-Entry
+   */
+  function shortlink_atom_entry() {
+    $shortlink = wp_get_shortlink();
+
+    if ( empty( $shortlink ) )
+      return;
+    
+    echo "<link rel='shortlink' href='" . esc_url( $shortlink ) . "' />\n";
   }
 }
 
