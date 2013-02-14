@@ -12,38 +12,11 @@
 
 class Hum {
 
-  public function __construct() {
-    add_action('init', array( $this, 'init' ));
-
-    register_activation_hook(__FILE__, 'flush_rewrite_rules');
-    register_deactivation_hook(__FILE__, 'flush_rewrite_rules');
-  }
-
   /**
-   * Initialize the plugin, registering WordPess hooks.
+   * Initialize the plugin.
    */
-  public function init() {
+  function init() {
     load_plugin_textdomain( 'hum', null, basename( dirname( __FILE__ ) ) );
-
-    // if you have hum installed, then you probably actually care about short
-    // links, so we'll add it to the admin menu bar.
-    add_action('admin_bar_menu', 'wp_admin_bar_shortlink_menu', 90);
-
-    add_action('query_vars', array( $this, 'query_vars' ));
-    add_action('parse_request', array( $this, 'parse_request' ));
-    add_filter('hum_request', array( $this, 'redirect_local' ), 20, 2);
-    add_action('hum_request', array( $this, 'redirect_request' ), 30, 2);
-    add_filter('hum_request_i', array( $this, 'redirect_request_i' ), 20);
-    add_action('generate_rewrite_rules', array( $this, 'rewrite_rules' ));
-    add_filter('pre_option_hum_shortlink_base', array( $this, 'config_shortlink_base' ));
-    add_filter('pre_get_shortlink', array( $this, 'get_shortlink' ), 10, 4);
-    add_filter('template_redirect', array( $this, 'legacy_redirect' ));
-    add_filter('hum_legacy_id', array( $this, 'legacy_ftl_id' ), 10, 2);
-    add_action('atom_entry', array( $this, 'shortlink_atom_entry' ));
-
-    // Admin Settings
-    add_action('admin_init', array( $this, 'admin_init' ));
-    add_action('admin_menu', array( $this, 'admin_menu' ));
   }
 
   /**
@@ -212,7 +185,7 @@ class Hum {
     $post_id = 0;
     if ( 'query' == $context ) {
       if ( is_front_page() ) {
-        $link = trailingslashit( $this->shortlink_base() );
+        $link = trailingslashit( Hum::shortlink_base() );
       } elseif ( is_singular() ) {
         $post_id = get_queried_object_id();
       }
@@ -222,9 +195,9 @@ class Hum {
     }
 
     if ( !empty($post_id) ) {
-      $type = $this->type_prefix($post_id);
+      $type = Hum::type_prefix($post_id);
       $sxg_id = num_to_sxg($post_id);
-      $link = trailingslashit( $this->shortlink_base() ) . $type . '/' . $sxg_id;
+      $link = trailingslashit( Hum::shortlink_base() ) . $type . '/' . $sxg_id;
     }
 
     return $link;
@@ -319,7 +292,7 @@ class Hum {
    */
   function admin_menu() {
     add_settings_field('hum_shortlink_base', __('Shortlink Base (URL)', 'hum'),
-        array( $this, 'admin_shortlink_base'), 'general');
+        array( 'Hum', 'admin_shortlink_base'), 'general');
   }
 
   /**
@@ -356,7 +329,31 @@ class Hum {
   }
 }
 
-new Hum;
+add_action('init', array( 'Hum', 'init' ));
+
+// if you have hum installed, then you probably actually care about short
+// links, so we'll add it to the admin menu bar.
+add_action('admin_bar_menu', 'wp_admin_bar_shortlink_menu', 90);
+
+add_action('query_vars', array( 'Hum', 'query_vars' ));
+add_action('parse_request', array( 'Hum', 'parse_request' ));
+add_filter('hum_request', array( 'Hum', 'redirect_local' ), 20, 2);
+add_action('hum_request', array( 'Hum', 'redirect_request' ), 30, 2);
+add_filter('hum_request_i', array( 'Hum', 'redirect_request_i' ), 20);
+add_action('generate_rewrite_rules', array( 'Hum', 'rewrite_rules' ));
+add_filter('pre_option_hum_shortlink_base', array( 'Hum', 'config_shortlink_base' ));
+add_filter('pre_get_shortlink', array( 'Hum', 'get_shortlink' ), 10, 4);
+add_filter('template_redirect', array( 'Hum', 'legacy_redirect' ));
+add_filter('hum_legacy_id', array( 'Hum', 'legacy_ftl_id' ), 10, 2);
+add_action('atom_entry', array( 'Hum', 'shortlink_atom_entry' ));
+
+// Admin Settings
+add_action('admin_init', array( 'Hum', 'admin_init' ));
+add_action('admin_menu', array( 'Hum', 'admin_menu' ));
+
+register_activation_hook(__FILE__, 'flush_rewrite_rules');
+register_deactivation_hook(__FILE__, 'flush_rewrite_rules');
+
 
 
 // New Base 60 - see http://ttk.me/w/NewBase60
