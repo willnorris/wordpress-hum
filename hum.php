@@ -63,7 +63,13 @@ class Hum {
    */
   function parse_request( $wp ) {
     if ( array_key_exists( 'hum', $wp->query_vars ) ) {
-      list($type, $id) = explode('/', $wp->query_vars['hum'], 2);
+      $hum_path = $wp->query_vars['hum'];
+      if ( strpos($hum_path, '/') !== false ) {
+        list($type, $id) = explode('/', $hum_path, 2);
+      } else {
+        $type = $hum_path;
+        $id = null;
+      }
       do_action("hum_request_{$type}", $id);
       do_action('hum_request', $type, $id);
 
