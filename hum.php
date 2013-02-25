@@ -31,8 +31,8 @@ class Hum {
 
     add_action('query_vars', array( $this, 'query_vars' ));
     add_action('parse_request', array( $this, 'parse_request' ));
-    add_action('hum_request', array( $this, 'redirect_request' ), 30, 2);
-    add_filter('hum_request_i', array( $this, 'redirect_request_i' ), 20);
+    add_filter('hum_redirect', array( $this, 'redirect_request' ), 10, 3);
+    add_filter('hum_redirect_i', array( $this, 'redirect_request_i' ), 10, 2);
     add_action('generate_rewrite_rules', array( $this, 'rewrite_rules' ));
     add_filter('pre_option_hum_shortlink_base', array( $this, 'config_shortlink_base' ));
     add_filter('pre_get_shortlink', array( $this, 'get_shortlink' ), 10, 4);
@@ -57,7 +57,7 @@ class Hum {
    * Parse request for shortlink.  This is the main entry point for handling
    * short URLs.
    *
-   * @uses do_action() Calls 'hum_request' action
+   * @uses apply_filters() Calls 'hum_redirect' filter
    *
    * @param WP $wp the WordPress environment for the request
    */
@@ -70,13 +70,20 @@ class Hum {
         $type = $hum_path;
         $id = null;
       }
-      do_action('hum_request', $type, $id);
+      $url = apply_filters('hum_redirect', null, $type, $id);
 
       // hum hasn't handled the request yet, so try again but strip common
       // punctuation that might appear after a URL in written text: . , )
-      $clean_id = preg_replace('/[\.,\)]+$/', '', $id);
-      if ($id != $clean_id) {
-        do_action('hum_request', $type, $clean_id);
+      if ( !$url ) {
+        $clean_id = preg_replace('/[\.,\)]+$/', '', $id);
+        if ($id != $clean_id) {
+          $url = apply_filters('hum_redirect', null, $type, $clean_id);
+        }
+      }
+
+      if ( $url ) {
+        wp_redirect($url, 301);
+        exit;
       }
 
       // hum didn't handle request, so issue 404.
@@ -113,15 +120,13 @@ class Hum {
    *   add_filter('hum_redirect_base_w',
    *     create_function('', 'return "http://willnorris.pbworks.com/";'));
    *
-   * @uses do_action() Calls 'hum_request_{$type}' action
+   * @uses apply_filters() Calls 'hum_redirect_{$type}' action
    * @uses apply_filters() Calls 'hum_redirect_base_{$type}' filter on redirect base URL
    *
    * @param string $type the content-type prefix
    * @param string $id the requested post ID
    */
-  public function redirect_request( $type, $id ) {
-    do_action("hum_request_{$type}", $id);
-
+  public function redirect_request( $url, $type, $id ) {
     // locally hosted content
     $local_types = $this->local_types();
     if ( in_array($type, $local_types) ) {
@@ -139,39 +144,39 @@ class Hum {
       }
     }
 
-    if ( $url ) {
-      wp_redirect( $url, 301 );
-      exit;
-    }
+    $url = apply_filters("hum_redirect_{$type}", $url, $id);
+    return $url;
   }
 
   /**
    * Handles /i/ URLs that have ISBN or ASIN subpaths by redirecting to Amazon.
    *
-   * @uses do_action() Calls 'hum_request_i_{$subtype}' action
+   * @uses apply_filters() Calls 'hum_redirect_i_{$subtype}' action
    * @uses apply_filters() Calls 'amazon_affiliate_id' filter
    *
    * @param string $path subpath of URL (after /i/)
    */
-  public function redirect_request_i( $path ) {
-    list($subtype, $id) = preg_split('|/|', $path, 2);
-    do_action("hum_request_i_{$subtype}", $id);
-    switch ($subtype) {
-      case 'a':
-      case 'asin':
-      case 'i':
-      case 'isbn':
-        $amazon_id = apply_filters('amazon_affiliate_id', false);
-        if ($amazon_id) {
-          wp_redirect('http://www.amazon.com/gp/redirect.html?ie=UTF8&location=' .
-              'http%3A%2F%2Fwww.amazon.com%2Fdp%2F' . $id . '&tag=' . $amazon_id .
-              '&linkCode=ur2&camp=1789&creative=9325');
-        } else {
-          wp_redirect('http://www.amazon.com/dp/' . $id );
-        }
-        exit;
-        break;
+  public function redirect_request_i( $url, $path ) {
+    list($subtype, $id) = explode('/', $path, 2);
+    if ( $subtype ) {
+      switch ($subtype) {
+        case 'a':
+        case 'asin':
+        case 'i':
+        case 'isbn':
+          $amazon_id = apply_filters('amazon_affiliate_id', false);
+          if ($amazon_id) {
+            $url = 'http://www.amazon.com/gp/redirect.html?ie=UTF8&location=' .
+                'http%3A%2F%2Fwww.amazon.com%2Fdp%2F' . $id . '&tag=' . $amazon_id .
+                '&linkCode=ur2&camp=1789&creative=9325';
+          } else {
+            $url = 'http://www.amazon.com/dp/' . $id;
+          }
+          break;
+      }
+      $url = apply_filters("hum_redirect_i_{$subtype}", $url, $id);
     }
+    return $url;
   }
 
   /**
@@ -286,9 +291,10 @@ class Hum {
       global $wp;
       $post_id = apply_filters('hum_legacy_id', 0, $wp->request);
       if ( $post_id ) {
-        $permalink = get_permalink($post_id);
-        if ( $permalink ) {
-          wp_redirect($permalink, 301);
+        $url = get_permalink($post_id);
+        if ( $url ) {
+          $url = apply_filters('hum_legacy_redirect', $url);
+          wp_redirect($url, 301);
           exit;
         }
       }
@@ -357,17 +363,15 @@ class Hum {
     </script>
   <?php
   }
-  
+
   /**
-   * Add shortlink <link /> to Atom-Entry
+   * Add shortlink <link /> to Atom-Entry.
    */
   function shortlink_atom_entry() {
     $shortlink = wp_get_shortlink();
-
-    if ( empty( $shortlink ) )
-      return;
-    
-    echo "<link rel='shortlink' href='" . esc_url( $shortlink ) . "' />\n";
+    if ( $shortlink ) {
+      echo "\t\t" . '<link rel="shortlink" href="' . esc_attr( $shortlink ) . '" />' . "\n";
+    }
   }
 }
 
