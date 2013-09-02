@@ -262,8 +262,24 @@ class Hum {
   public function type_prefix( $post ) {
     $prefix = 'b';
 
-    $post_format = get_post_format( $post );
-    switch($post_format) {
+    $post_type = get_post_type( $post );
+
+    if ( $post_type == 'attachment' ) {
+      $mime_type = get_post_mime_type($post->ID);
+      $media_type = preg_replace("/(\/[a-zA-Z]+)/i", "", $mime_type);
+
+      switch ($media_type) {
+        case 'audio':
+        case 'video':
+          $prefix = 'a'; break;
+        case 'image':
+          $prefix = 'p'; break;
+      }
+
+      // @todo add support for slides
+    } else {
+      $post_format = get_post_format( $post );
+      switch($post_format) {
         case 'aside':
         case 'status':
         case 'link':
@@ -275,6 +291,7 @@ class Hum {
         case 'gallery':
         case 'image':
           $prefix = 'p'; break;
+      }
     }
 
     return apply_filters('hum_type_prefix', $prefix, $post);
