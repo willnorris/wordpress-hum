@@ -367,7 +367,7 @@ class Hum {
   /**
    * Add shortlink <link /> to Atom-Entry.
    */
-  function shortlink_atom_entry() {
+  public function shortlink_atom_entry() {
     $shortlink = wp_get_shortlink();
     if ( $shortlink ) {
       echo "\t\t" . '<link rel="shortlink" href="' . esc_attr( $shortlink ) . '" />' . "\n";
