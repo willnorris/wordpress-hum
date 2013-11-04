@@ -265,7 +265,7 @@ class Hum {
     $post_type = get_post_type( $post );
 
     if ( $post_type == 'attachment' ) {
-      $mime_type = get_post_mime_type($post->ID);
+      $mime_type = get_post_mime_type();
       $media_type = preg_replace("/(\/[a-zA-Z]+)/i", "", $mime_type);
 
       switch ($media_type) {
