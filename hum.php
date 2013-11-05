@@ -265,7 +265,14 @@ class Hum {
     $post_type = get_post_type( $post );
 
     if ( $post_type == 'attachment' ) {
-      $mime_type = get_post_mime_type();
+      // check if $post is a WP_Post or an ID
+      if (is_int($post)) {
+        $post_id = $post;
+      } else {
+        $post_id = $post->ID;
+      }
+
+      $mime_type = get_post_mime_type( $post_id );
       $media_type = preg_replace("/(\/[a-zA-Z]+)/i", "", $mime_type);
 
       switch ($media_type) {
