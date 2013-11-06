@@ -266,7 +266,7 @@ class Hum {
 
     if ( $post_type == 'attachment' ) {
       // check if $post is a WP_Post or an ID
-      if (is_int($post)) {
+      if (is_numeric($post)) {
         $post_id = $post;
       } else {
         $post_id = $post->ID;
