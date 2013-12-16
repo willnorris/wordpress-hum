@@ -20,7 +20,7 @@ class Hum {
   }
 
   /**
-   * Initialize the plugin, registering WordPess hooks.
+   * Initialize the plugin, registering WordPress hooks.
    */
   public function init() {
     load_plugin_textdomain( 'hum', null, basename( dirname( __FILE__ ) ) );
