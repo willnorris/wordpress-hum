@@ -20,7 +20,7 @@ class Hum {
   }
 
   /**
-   * Initialize the plugin, registering WordPess hooks.
+   * Initialize the plugin, registering WordPress hooks.
    */
   public function init() {
     load_plugin_textdomain( 'hum', null, basename( dirname( __FILE__ ) ) );
@@ -265,7 +265,14 @@ class Hum {
     $post_type = get_post_type( $post );
 
     if ( $post_type == 'attachment' ) {
-      $mime_type = get_post_mime_type($post->ID);
+      // check if $post is a WP_Post or an ID
+      if (is_numeric($post)) {
+        $post_id = $post;
+      } else {
+        $post_id = $post->ID;
+      }
+
+      $mime_type = get_post_mime_type( $post_id );
       $media_type = preg_replace("/(\/[a-zA-Z]+)/i", "", $mime_type);
 
       switch ($media_type) {
