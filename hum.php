@@ -10,6 +10,7 @@
  Text Domain: hum
  */
 
+if (!class_exists('Hum')):
 class Hum {
 
   public function __construct() {
@@ -400,6 +401,7 @@ class Hum {
 }
 
 new Hum;
+endif; // if class_exists
 
 
 // New Base 60 - see http://ttk.me/w/NewBase60
