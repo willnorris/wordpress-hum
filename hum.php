@@ -12,6 +12,8 @@
 
 if (!class_exists('Hum')):
 class Hum {
+  
+  private $redirect_to;
 
   public function __construct() {
     add_action('init', array( $this, 'init' ));
@@ -34,6 +36,7 @@ class Hum {
     add_action('parse_request', array( $this, 'parse_request' ));
     add_filter('hum_redirect', array( $this, 'redirect_request' ), 10, 3);
     add_filter('hum_redirect_i', array( $this, 'redirect_request_i' ), 10, 2);
+    add_filter('hum_process_redirect', array( $this, 'process_redirect' ), 10, 2);
     add_action('generate_rewrite_rules', array( $this, 'rewrite_rules' ));
     add_filter('pre_option_hum_shortlink_base', array( $this, 'config_shortlink_base' ));
     add_filter('pre_get_shortlink', array( $this, 'get_shortlink' ), 10, 4);
@@ -83,16 +86,107 @@ class Hum {
       }
 
       if ( $url ) {
-        wp_redirect($url, 301);
-        exit;
+        do_action( 'hum_process_redirect', $url, $id );
+        // exit;
+      }
+      else {
+        // hum didn't handle request, so issue 404.
+        // manually setting query vars like this feels very fragile, but
+        // $wp_query->set_404() doesn't do what we need here.
+        $wp->query_vars['error'] = '404';
       }
 
-      // hum didn't handle request, so issue 404.
-      // manually setting query vars like this feels very fragile, but
-      // $wp_query->set_404() doesn't do what we need here.
-      $wp->query_vars['error'] = '404';
     }
   }
+
+  /**
+   * Process the redirect using the JavaScript history API for urls
+   * on the same domain, otherwise use WordPress's built in redirect
+   * function.
+   */
+  public function process_redirect( $url, $id ) {
+    global $wp_query;
+    $parsed_url = parse_url( $url );
+    $parsed_ssl = ( 'https' == $parsed_url['scheme'] ) ? true : false;
+    
+    if ( ( is_ssl() == $parsed_ssl ) && 
+         ( $_SERVER['HTTP_HOST'] == $parsed_url['host'] ) ) {
+           // can use JS history API
+           // echo 'can use history api';
+           $post_id = sxg_to_num( $id );
+           $redirect_post = get_post( $post_id );
+           
+           $this->redirect_to = array(
+             'id' => $post_id,
+             'type' => $redirect_post->post_type
+           );
+           add_filter( 'pre_get_posts', array( $this, 'filter_get_posts' ) );
+           add_filter( 'wp_head', array( $this, 'history_replace' ), 1 );
+    }
+    else {
+      // use WP redirect function.
+      wp_redirect($url, 301);
+      exit;
+    }
+    
+  }
+
+  /**
+   * Replace the short URL with the correct version using the 
+   * JavaScript history API to prevent extra hit on the server
+   */
+  function history_replace() {
+    $redirect_id = $this->redirect_to['id'];
+    $redirect_url = get_permalink( $redirect_id );
+    // output compressed JS
+  	echo '<script>';
+  	echo "(function(w,u,h){";
+  	echo "h=w.history;";
+  	echo "if(h.replaceState){";
+  	echo "h.replaceState({u:u},'',u+w.location.hash);";
+  	echo "}";
+  	echo "}(this,'$redirect_url'))";
+  	echo '</script>' . "\n";
+  }
+
+  /**
+   * Convert a hum short URL to a WordPress query
+   */
+  function filter_get_posts( $query ) {
+    $redirect_to = $this->redirect_to;
+    if ( $query->is_main_query() && !is_admin() ) {
+      
+      $query->is_home = false;
+      $query->is_singular = true;
+      $query->set( 'hum', false );
+      unset( $query->hum );
+      if ( $redirect_to['type'] == 'page' ) {
+        $query->set( 'page_id', $redirect_to['id'] );
+        $query->set( 'post_type', 'page' );
+        $query->is_page = true;
+        $query->query = array(
+          'page_id' => $redirect_to['id'],
+          'post_type' => 'page'
+        );
+      }
+      else {
+        $query->set( 'p', $redirect_to['id'] );
+        $query->set( 'post_type', 'any' );
+        $query->is_single = true;
+        $query->query = array(
+          'page_id' => $redirect_to['id'],
+          'post_type' => 'any'
+        );
+      }
+      
+      
+      // echo '<pre>';
+      // print_r( $redirect_to );
+      // print_r( $query );
+      // echo '</pre>';
+    }
+  }
+
 
   /**
    * Get the short URL types that are handled locally by WordPress.
