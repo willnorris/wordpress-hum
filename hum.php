@@ -108,6 +108,8 @@ class Hum {
     global $wp_query;
     $parsed_url = parse_url( $url );
     $parsed_ssl = ( 'https' == $parsed_url['scheme'] ) ? true : false;
+ 
+ 
     
     if ( ( is_ssl() == $parsed_ssl ) && 
          ( $_SERVER['HTTP_HOST'] == $parsed_url['host'] ) ) {
@@ -122,6 +124,9 @@ class Hum {
            );
            add_filter( 'pre_get_posts', array( $this, 'filter_get_posts' ) );
            add_filter( 'wp_head', array( $this, 'history_replace' ), 1 );
+
+           // prevent WP from doing a redirect
+           add_filter( 'redirect_canonical', __return_false );
     }
     else {
       // use WP redirect function.
