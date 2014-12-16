@@ -1,5 +1,5 @@
 # Hum #
-Contributors: willnorris  
+Contributors: willnorris, pfefferle  
 Tags: shortlink, whistle, diso  
 Requires at least: 3.0  
 Tested up to: 4.0.1  
