@@ -1,10 +1,10 @@
 <?php
 /*
  Plugin Name: Hum
- Plugin URI: http://github.com/willnorris/wordpress-hum
+ Plugin URI: https://github.com/willnorris/wordpress-hum
  Description: Personal URL shortener for WordPress
  Author: Will Norris
- Author URI: http://willnorris.com/
+ Author URI: https://willnorris.com/
  Version: 1.2-alpha
  License: MIT (http://opensource.org/licenses/MIT)
  Text Domain: hum
