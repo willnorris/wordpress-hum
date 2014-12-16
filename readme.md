@@ -137,6 +137,18 @@ using:
 Project maintined on github at
 [willnorris/wordpress-hum](https://github.com/willnorris/wordpress-hum).
 
+### 1.2 ###
+
+ - move link post format to use 't' prefix instead of 'h' and add support for
+   image post format
+ - add support for WordPress media attachments
+ - add shortlinks to Atom feeds
+ - add support for legacy short url schemes (see [#6][])
+ - switch to using WordPress filters instead of actions for hum extensions (see
+   [#3][])
+
+[full changelog](https://github.com/willnorris/wordpress-hum/compare/1.1...1.2)
+
 ### 1.1 ###
 
  - allow custom domain to be configured using `HUM_SHORTLINK_BASE` constant or
@@ -154,7 +166,9 @@ Project maintined on github at
 
 [#1]: https://github.com/willnorris/wordpress-hum/issues/1
 [#2]: https://github.com/willnorris/wordpress-hum/issues/2
+[#3]: https://github.com/willnorris/wordpress-hum/issues/3
 [#4]: https://github.com/willnorris/wordpress-hum/issues/4
+[#6]: https://github.com/willnorris/wordpress-hum/issues/6
 
 ### 1.0 ###
  - initial public release
