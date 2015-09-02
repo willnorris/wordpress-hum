@@ -33,6 +33,7 @@ class Hum {
     add_action('parse_request', array( $this, 'parse_request' ));
     add_filter('hum_redirect', array( $this, 'redirect_request' ), 10, 3);
     add_filter('hum_redirect_i', array( $this, 'redirect_request_i' ), 10, 2);
+    add_filter('hum_process_redirect', array( $this, 'process_redirect' ), 10, 2);
     add_action('generate_rewrite_rules', array( $this, 'rewrite_rules' ));
     add_filter('pre_option_hum_shortlink_base', array( $this, 'config_shortlink_base' ));
     add_filter('pre_get_shortlink', array( $this, 'get_shortlink' ), 10, 4);
@@ -83,8 +84,7 @@ class Hum {
       }
 
       if ( $url ) {
-        wp_redirect($url, 301);
-        exit;
+        do_action('hum_process_redirect', $url, $id);
       }
 
       // hum didn't handle request, so issue 404.
@@ -92,6 +92,17 @@ class Hum {
       // $wp_query->set_404() doesn't do what we need here.
       $wp->query_vars['error'] = '404';
     }
+  }
+
+  /**
+   * Process the redirect.
+   *
+   * @param string $url the permalink of the post
+   * @param string $id the requested post ID
+   */
+  public function process_redirect( $url, $id ) {
+    wp_redirect($url, 301);
+    exit;
   }
 
   /**
