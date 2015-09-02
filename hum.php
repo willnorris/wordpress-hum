@@ -168,13 +168,14 @@ class Hum {
         case 'asin':
         case 'i':
         case 'isbn':
+          $amazon_domain = apply_filters('hum_amazon_domain', 'www.amazon.com');
           $amazon_id = apply_filters('amazon_affiliate_id', false);
           if ($amazon_id) {
-            $url = 'http://www.amazon.com/gp/redirect.html?ie=UTF8&location=' .
-                'http%3A%2F%2Fwww.amazon.com%2Fdp%2F' . $id . '&tag=' . $amazon_id .
-                '&linkCode=ur2&camp=1789&creative=9325';
+            // valid partner shortlink, checked by
+            // https://partnernet.amazon.de/gp/associates/network/tools/link-checker/main.html
+            $url = 'http://' . $amazon_domain . '/dp/product/' . $id . '?tag=' . $amazon_id;
           } else {
-            $url = 'http://www.amazon.com/dp/' . $id;
+            $url = 'http://' . $amazon_domain . '/dp/product/' . $id;
           }
           break;
       }
