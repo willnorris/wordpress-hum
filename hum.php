@@ -71,6 +71,7 @@ class Hum {
         $type = $hum_path;
         $id = null;
       }
+
       $url = apply_filters('hum_redirect', null, $type, $id);
 
       // hum hasn't handled the request yet, so try again but strip common
@@ -124,6 +125,7 @@ class Hum {
    * @uses apply_filters() Calls 'hum_redirect_{$type}' action
    * @uses apply_filters() Calls 'hum_redirect_base_{$type}' filter on redirect base URL
    *
+   * @param string $url the short URL
    * @param string $type the content-type prefix
    * @param string $id the requested post ID
    */
@@ -155,10 +157,12 @@ class Hum {
    * @uses apply_filters() Calls 'hum_redirect_i_{$subtype}' action
    * @uses apply_filters() Calls 'amazon_affiliate_id' filter
    *
+   * @param string $url the short URL
    * @param string $path subpath of URL (after /i/)
    */
   public function redirect_request_i( $url, $path ) {
     list($subtype, $id) = explode('/', $path, 2);
+
     if ( $subtype ) {
       switch ($subtype) {
         case 'a':
@@ -212,6 +216,8 @@ class Hum {
 
   /**
    * Allow the constant named 'HUM_SHORTLINK_BASE' to override the base URL for shortlinks.
+   *
+   * @param string $url the short URL
    */
   public function config_shortlink_base( $url = '' ) {
     if ( defined( 'HUM_SHORTLINK_BASE') ) {
