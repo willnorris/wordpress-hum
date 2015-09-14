@@ -59,6 +59,7 @@ class Hum {
    * short URLs.
    *
    * @uses apply_filters() Calls 'hum_redirect' filter
+   * @uses apply_filters() Calls 'hum_process_redirect' filter
    *
    * @param WP $wp the WordPress environment for the request
    */
@@ -165,6 +166,7 @@ class Hum {
    * Handles /i/ URLs that have ISBN or ASIN subpaths by redirecting to Amazon.
    *
    * @uses apply_filters() Calls 'hum_redirect_i_{$subtype}' action
+   * @uses apply_filters() Calls 'amazon_domain' filter
    * @uses apply_filters() Calls 'amazon_affiliate_id' filter
    *
    * @param string $url the short URL
