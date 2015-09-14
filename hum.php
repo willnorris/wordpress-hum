@@ -179,7 +179,7 @@ class Hum {
         case 'asin':
         case 'i':
         case 'isbn':
-          $amazon_domain = apply_filters('hum_amazon_domain', 'www.amazon.com');
+          $amazon_domain = apply_filters('amazon_domain', 'www.amazon.com');
           $amazon_id = apply_filters('amazon_affiliate_id', false);
           if ($amazon_id) {
             // valid partner shortlink, checked by
