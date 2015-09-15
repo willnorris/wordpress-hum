@@ -140,7 +140,7 @@ Project maintined on github at
 = 1.2.1 =
 
  - add `amazon_domain` filter, to support different countries
- - add `hum_process_redirect` action, to overwrite default rewrite method (see [#11][])
+ - add `hum_process_redirect` action, to overwrite default rewrite method (see [#17][])
 
 [full changelog](https://github.com/willnorris/wordpress-hum/compare/1.2...1.2.1)
 
@@ -175,7 +175,7 @@ Project maintined on github at
 [#3]: https://github.com/willnorris/wordpress-hum/issues/3
 [#4]: https://github.com/willnorris/wordpress-hum/issues/4
 [#6]: https://github.com/willnorris/wordpress-hum/issues/6
-[#11]: https://github.com/willnorris/wordpress-hum/issues/11
+[#17]: https://github.com/willnorris/wordpress-hum/pull/17
 
 = 1.0 =
  - initial public release
