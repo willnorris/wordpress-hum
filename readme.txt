@@ -1,16 +1,16 @@
-# Hum #
-**Contributors:** willnorris, pfefferle  
-**Tags:** shortlink, whistle, diso  
-**Requires at least:** 3.0  
-**Tested up to:** 4.0.1  
-**Stable tag:** 1.2.1  
-**License:** MIT  
-**License URI:** http://opensource.org/licenses/MIT  
+=== Hum ===
+Contributors: willnorris, pfefferle
+Tags: shortlink, whistle, diso
+Requires at least: 3.0
+Tested up to: 4.0.1
+Stable tag: 1.2.1
+License: MIT
+License URI: http://opensource.org/licenses/MIT
 
 Personal URL shortener for WordPress
 
 
-## Description ##
+== Description ==
 
 Hum is a personal URL shortener for WordPress, designed to provide short URLs
 to your personal content, both hosted on WordPress and elsewhere.  For example,
@@ -36,13 +36,13 @@ page for [Whistle][], which served as the inspiration for Hum.
 [Whistle]: http://ttk.me/w/Whistle
 
 
-## Installation ##
+== Installation ==
 
 Follow the normal instructions for [installing WordPress plugins][install].
 
 [install]: http://codex.wordpress.org/Managing_Plugins#Installing_Plugins
 
-### Using a custom domain ###
+= Using a custom domain =
 
 If you have a custom domain you'd like to use with Hum, add it as the
 'Shortlink Base (URL)' on the 'General Settings' WordPress admin page or define
@@ -56,9 +56,9 @@ well for this, so you don't need to setup a new domain with your web host.
 Just make sure that you are **not** using an iframe style redirect.
 
 
-## Frequently Asked Questions ##
+== Frequently Asked Questions ==
 
-### What types of content does Hum support? ###
+= What types of content does Hum support? =
 
 Out of the box, Hum will provide shortlinks for any content locally hosted on
 WordPress.  Most shortlinks will use the `b` type prefix, with the exception of
@@ -84,16 +84,16 @@ to redirect to an external service.  See more in the developer documentation.
 [post format]: http://codex.wordpress.org/Post_Formats
 
 
-## Developer Documentation ##
+== Developer Documentation ==
 
-### Adding your Amazon Affiliate ID ###
+= Adding your Amazon Affiliate ID =
 
 If you'd like to include your Amazone Affiliate ID in the `/i/` redirect URLs,
 implement the `amazon_affiliate_id` filter.  For example:
 
     add_filter('amazon_affiliate_id', create_function('', 'return "willnorris-20";'));
 
-### Additional Local Types ###
+= Additional Local Types =
 
 Out of the box, Hum only registers the `b` and `t` prefix to be served locally
 by WordPress.  If you would like to register additional prefixes, implement the
@@ -121,7 +121,7 @@ type.  Here, we're registering 'p' which is normally used for photos.
     }
     add_filter('hum_type_prefix', 'myplugin_hum_type_prefix', 10, 2);
 
-### Simple Redirect ###
+= Simple Redirect =
 
 You can redirect all traffic for a prefix using a single line of PHP my
 implementing the `hum_redirect_base_{type}` filter where `{type}` is the prefix
@@ -132,19 +132,19 @@ using:
       create_function('', 'return "http://wiki.willnorris.com/";'));
 
 
-## Changelog ##
+== Changelog ==
 
 Project maintined on github at
 [willnorris/wordpress-hum](https://github.com/willnorris/wordpress-hum).
 
-### 1.2.1 ###
+= 1.2.1 =
 
  - add `amazon_domain` filter, to support different countries
  - add `hum_process_redirect` action, to overwrite default rewrite method (see [#11][])
 
 [full changelog](https://github.com/willnorris/wordpress-hum/compare/1.2...1.2.1)
 
-### 1.2 ###
+= 1.2 =
 
  - move link post format to use 't' prefix instead of 'h' and add support for
    image post format
@@ -156,7 +156,7 @@ Project maintined on github at
 
 [full changelog](https://github.com/willnorris/wordpress-hum/compare/1.1...1.2)
 
-### 1.1 ###
+= 1.1 =
  - allow custom domain to be configured using `HUM_SHORTLINK_BASE` constant or
    via the General Settings admin page.
  - strip some punctuation at the end of URLs (see [#4][])
@@ -177,12 +177,12 @@ Project maintined on github at
 [#6]: https://github.com/willnorris/wordpress-hum/issues/6
 [#11]: https://github.com/willnorris/wordpress-hum/issues/11
 
-### 1.0 ###
+= 1.0 =
  - initial public release
 
 
-## Upgrade Notice ##
+== Upgrade Notice ==
 
-### 1.1 ###
+= 1.1 =
 Adds a new admin UI for setting a custom domain for shortlinks, includes
 smarter URL matching, and adds various small improvements and bug fixes.
