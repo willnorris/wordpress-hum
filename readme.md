@@ -2,8 +2,8 @@
 **Contributors:** willnorris, pfefferle  
 **Tags:** shortlink, whistle, diso  
 **Requires at least:** 3.0  
-**Tested up to:** 4.0.1  
-**Stable tag:** 1.2.1  
+**Tested up to:** 4.7.4  
+**Stable tag:** 1.2.2  
 **License:** MIT  
 **License URI:** http://opensource.org/licenses/MIT  
 
@@ -12,24 +12,13 @@ Personal URL shortener for WordPress
 
 ## Description ##
 
-Hum is a personal URL shortener for WordPress, designed to provide short URLs
-to your personal content, both hosted on WordPress and elsewhere.  For example,
-rather than a long URL for a WordPress post such as
-<http://willnorris.com/2011/01/hum-personal-url-shortener-wordpress>, you could
-have a short URL like <http://willnorris.com/b/FJ>.  Additional, if you have a
-custom domain for short URLs, you can shorten things further like
-<http://wjn.me/b/FJ>.
+Hum is a personal URL shortener for WordPress, designed to provide short URLs to your personal content, both hosted on WordPress and elsewhere.  For example, rather than a long URL for a WordPress post such as <http://willnorris.com/2011/01/hum-personal-url-shortener-wordpress>, you could have a short URL like <http://willnorris.com/b/FJ>.  Additional, if you have a custom domain for short URLs, you can shorten things further like <http://wjn.me/b/FJ>.
 
-WordPress post IDs are shortened using the [NewBase60][] encoding scheme which is
-specifically optimized for brevity and readability, with built-in error
-correction for commonly confused characters like '1', 'l', and 'I'.
+WordPress post IDs are shortened using the [NewBase60][] encoding scheme which is specifically optimized for brevity and readability, with built-in error correction for commonly confused characters like '1', 'l', and 'I'.
 
-Hum is not designed as a general purpose URL shortener along the lines of
-<http://bit.ly> or <http://goo.gl>.  Rather, it is specifically intended as a
-personal shortener for your own content.
+Hum is not designed as a general purpose URL shortener along the lines of <http://bit.ly> or <http://goo.gl>.  Rather, it is specifically intended as a personal shortener for your own content.
 
-Read more about the reasoning for a personal URL shortener at [Tantek Celik][]'s
-page for [Whistle][], which served as the inspiration for Hum.
+Read more about the reasoning for a personal URL shortener at [Tantek Celik][]'s page for [Whistle][], which served as the inspiration for Hum.
 
 [NewBase60]: http://ttk.me/w/NewBase60
 [Tantek Celik]: http://tantek.com/
@@ -44,32 +33,23 @@ Follow the normal instructions for [installing WordPress plugins][install].
 
 ### Using a custom domain ###
 
-If you have a custom domain you'd like to use with Hum, add it as the
-'Shortlink Base (URL)' on the 'General Settings' WordPress admin page or define
-the `HUM_SHORTLINK_BASE` constant in your `wp-config.php`:
+If you have a custom domain you'd like to use with Hum, add it as the 'Shortlink Base (URL)' on the 'General Settings' WordPress admin page or define the `HUM_SHORTLINK_BASE` constant in your `wp-config.php`:
 
     define('HUM_SHORTLINK_BASE', 'http://wjn.me');
 
-You will also need to setup your short domain to redirect to your normal
-domain.  Many domain registrars provide free redirection services that work
-well for this, so you don't need to setup a new domain with your web host.
-Just make sure that you are **not** using an iframe style redirect.
+You will also need to setup your short domain to redirect to your normal domain.  Many domain registrars provide free redirection services that work well for this, so you don't need to setup a new domain with your web host. Just make sure that you are **not** using an iframe style redirect.
 
 
 ## Frequently Asked Questions ##
 
 ### What types of content does Hum support? ###
 
-Out of the box, Hum will provide shortlinks for any content locally hosted on
-WordPress.  Most shortlinks will use the `b` type prefix, with the exception of
-posts with a 'status' [post format][], which have shortlinks using the `t` type
-prefix.  For example:
+Out of the box, Hum will provide shortlinks for any content locally hosted on WordPress.  Most shortlinks will use the `b` type prefix, with the exception of posts with a 'status' [post format][], which have shortlinks using the `t` type prefix.  For example:
 
  - <http://wjn.me/b/FJ>
  - <http://wjn.me/t/FR>
 
-Additionally, the `i` type prefix, along with one of four subtypes, is
-supported as follows:
+Additionally, the `i` type prefix, along with one of four subtypes, is supported as follows:
 
  - `asin` or `a` for Amazon ASIN numbers
  - `isbn` or `i` for ISBN numbers
@@ -78,8 +58,7 @@ All `i` URLs are redirected to Amazon.com.  For example:
 
  - <http://wjn.me/i/a/B003QP4NPE>
 
-Additional type prefixes can be registered to serve WordPress hosted content or
-to redirect to an external service.  See more in the developer documentation.
+Additional type prefixes can be registered to serve WordPress hosted content or to redirect to an external service.  See more in the developer documentation.
 
 [post format]: http://codex.wordpress.org/Post_Formats
 
@@ -88,16 +67,13 @@ to redirect to an external service.  See more in the developer documentation.
 
 ### Adding your Amazon Affiliate ID ###
 
-If you'd like to include your Amazone Affiliate ID in the `/i/` redirect URLs,
-implement the `amazon_affiliate_id` filter.  For example:
+If you'd like to include your Amazone Affiliate ID in the `/i/` redirect URLs, implement the `amazon_affiliate_id` filter.  For example:
 
     add_filter('amazon_affiliate_id', create_function('', 'return "willnorris-20";'));
 
 ### Additional Local Types ###
 
-Out of the box, Hum only registers the `b` and `t` prefix to be served locally
-by WordPress.  If you would like to register additional prefixes, implement the
-`hum_local_types` filter.  For example, to include 'p' as well for photos:
+Out of the box, Hum only registers the `b` and `t` prefix to be served locally by WordPress.  If you would like to register additional prefixes, implement the `hum_local_types` filter.  For example, to include 'p' as well for photos:
 
     function myplugin_hum_local_types( $types ) {
       $types[] = 'p';
@@ -105,9 +81,7 @@ by WordPress.  If you would like to register additional prefixes, implement the
     }
     add_filter('hum_local_types', 'myplugin_hum_local_types');
 
-This will tell Hum to serve any `/p/{id}` URLs from WordPress.  Additionally,
-you'll want to instruct Hum to use your prefix for that particular content
-type.  Here, we're registering 'p' which is normally used for photos.
+This will tell Hum to serve any `/p/{id}` URLs from WordPress.  Additionally, you'll want to instruct Hum to use your prefix for that particular content type.  Here, we're registering 'p' which is normally used for photos.
 
     function myplugin_hum_type_prefix( $prefix, $post_id ) {
       $post = get_post( $post_id );
@@ -123,10 +97,7 @@ type.  Here, we're registering 'p' which is normally used for photos.
 
 ### Simple Redirect ###
 
-You can redirect all traffic for a prefix using a single line of PHP my
-implementing the `hum_redirect_base_{type}` filter where `{type}` is the prefix
-to redirect.  For example, I redirect all `/w/` URLs to wiki.willnorris.com
-using:
+You can redirect all traffic for a prefix using a single line of PHP my implementing the `hum_redirect_base_{type}` filter where `{type}` is the prefix to redirect.  For example, I redirect all `/w/` URLs to wiki.willnorris.com using:
 
     add_filter('hum_redirect_base_w',
       create_function('', 'return "http://wiki.willnorris.com/";'));
@@ -134,8 +105,11 @@ using:
 
 ## Changelog ##
 
-Project maintined on github at
-[willnorris/wordpress-hum](https://github.com/willnorris/wordpress-hum).
+Project maintined on github at [willnorris/wordpress-hum](https://github.com/willnorris/wordpress-hum).
+
+### 1.2.2 ###
+
+ - version bump
 
 ### 1.2.1 ###
 
