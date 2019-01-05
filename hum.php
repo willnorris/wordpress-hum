@@ -5,7 +5,7 @@
  * Description: Personal URL shortener for WordPress
  * Author: Will Norris
  * Author URI: https://willnorris.com/
- * Version: 1.2.3
+ * Version: 1.2.4
  * License: MIT
  * License URI: http://opensource.org/licenses/MIT
  * Text Domain: hum
@@ -15,6 +15,7 @@ class Hum {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
+		add_action( 'init', array( $this, 'rewrite_rules' ) );
 
 		register_activation_hook( __FILE__, array( $this, 'flush_rewrite_rules' ) );
 		register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
@@ -35,7 +36,6 @@ class Hum {
 		add_filter( 'hum_redirect', array( $this, 'redirect_request' ), 10, 3 );
 		add_filter( 'hum_redirect_i', array( $this, 'redirect_request_i' ), 10, 2 );
 		add_filter( 'hum_process_redirect', array( $this, 'process_redirect' ), 10, 2 );
-		add_action( 'init', array( $this, 'rewrite_rules' ) );
 		add_filter( 'pre_option_hum_shortlink_base', array( $this, 'config_shortlink_base' ) );
 		add_filter( 'pre_get_shortlink', array( $this, 'get_shortlink' ), 10, 4 );
 		add_filter( 'template_redirect', array( $this, 'legacy_redirect' ) );
@@ -202,7 +202,7 @@ class Hum {
 	 * Add rewrite rules for hum shortlinks.
 	 */
 	public function rewrite_rules() {
-		add_rewrite_rule( '([a-z](/.*)?$)', 'index.php?hum=$matches[1]', 'top' );
+		add_rewrite_rule( '([a-z](\/.*)?$)', 'index.php?hum=$matches[1]', 'top' );
 	}
 
 	/**
