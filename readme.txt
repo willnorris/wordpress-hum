@@ -2,7 +2,7 @@
 Contributors: willnorris, pfefferle
 Tags: shortlink, whistle, diso
 Requires at least: 3.0
-Tested up to: 5.0.2
+Tested up to: 5.3
 Stable tag: 1.2.4
 License: MIT
 License URI: http://opensource.org/licenses/MIT
