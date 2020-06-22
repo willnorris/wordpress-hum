@@ -45,6 +45,10 @@ class Hum {
 		// Admin Settings
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_filter( 'manage_edit-post_columns', array( $this, 'add_post_column' ), 10, 1 );
+		add_filter( 'manage_edit-page_columns', array( $this, 'add_post_column' ), 10, 1 );
+		add_action( 'manage_posts_custom_column', array( $this, 'add_posts_custom_column' ), 10, 2 );
+		add_action( 'manage_pages_custom_column', array( $this, 'add_posts_custom_column' ), 10, 2 );
 	}
 
 	/**
@@ -416,6 +420,35 @@ class Hum {
 		$shortlink = wp_get_shortlink();
 		if ( $shortlink ) {
 			echo "\t\t" . '<link rel="shortlink" href="' . esc_attr( $shortlink ) . '" />' . PHP_EOL;
+		}
+	}
+
+	/**
+	 * Show shortlink column.
+	 *
+	 * @param array $columns The list of columns.
+	 */
+	public function add_post_column( $columns ) {
+		$reorderes_columns = array();
+		foreach ( $columns as $key => $value ) {
+			if ( 'date' === $key ) {
+				$reorderes_columns['shortlink'] = esc_html__( 'Shortlink', 'hum' );
+			}
+			$reorderes_columns[ $key ] = $value;
+		}
+
+		return $reorderes_columns;
+	}
+
+	/**
+	 * Generate shortlink column.
+	 *
+	 * @param string $column_name The culumn name.
+	 * @param string $post_id The post id.
+	 */
+	public function add_posts_custom_column( $column_name, $post_id ) {
+		if ( 'shortlink' === $column_name ) {
+			printf( '<small>%s</small>', wp_get_shortlink( $post_id ) );
 		}
 	}
 }
