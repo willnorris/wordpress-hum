@@ -2,8 +2,8 @@
 Contributors: willnorris, pfefferle
 Tags: shortlink, whistle, diso
 Requires at least: 3.0
-Tested up to: 5.4
-Stable tag: 1.2.4
+Tested up to: 5.4.2
+Stable tag: 1.2.5
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -107,6 +107,10 @@ You can redirect all traffic for a prefix using a single line of PHP my implemen
 == Changelog ==
 
 Project maintined on github at [willnorris/wordpress-hum](https://github.com/willnorris/wordpress-hum).
+
+= 1.2.5 =
+
+* add shortlink to post/page overview pages
 
 = 1.2.4 =
 
