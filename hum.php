@@ -370,7 +370,7 @@ class Hum {
 		if ( is_numeric( $path ) ) {
 			$post = get_post( $path );
 		} else {
-			$post_id = base_convert( $path, 32, 10 );
+			$post_id = base_convert( preg_replace( '/[^0-9a-fA-F]/', '', $path ), 32, 10 );
 			$post    = get_post( $post_id );
 		}
 
