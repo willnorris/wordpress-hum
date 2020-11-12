@@ -3,7 +3,7 @@ Contributors: willnorris, pfefferle
 Tags: shortlink, whistle, diso
 Requires at least: 3.0
 Tested up to: 5.5
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -108,21 +108,36 @@ You can redirect all traffic for a prefix using a single line of PHP my implemen
 
 Project maintined on github at [willnorris/wordpress-hum](https://github.com/willnorris/wordpress-hum).
 
+= 1.2.6 =
+
+ - fix PHP 7.4 deprecation warning
+ - WordPress coding style changes
+
+[full changelog](https://github.com/willnorris/wordpress-hum/compare/1.2.5...1.2.6)
+
 = 1.2.5 =
 
-* add shortlink to post/page overview pages
+ - add shortlink to post/page overview pages
+
+[full changelog](https://github.com/willnorris/wordpress-hum/compare/1.2.4...1.2.5)
 
 = 1.2.4 =
 
-* finally fixed "flush rewrite rules"
+ - finally fixed "flush rewrite rules"
+
+[full changelog](https://github.com/willnorris/wordpress-hum/compare/1.2.3...1.2.4)
 
 = 1.2.3 =
 
-* fixed "flush rewrite rules"
+ - fixed "flush rewrite rules"
+
+[full changelog](https://github.com/willnorris/wordpress-hum/compare/1.2.2...1.2.3)
 
 = 1.2.2 =
 
  - version bump
+
+[full changelog](https://github.com/willnorris/wordpress-hum/compare/1.2.1...1.2.2)
 
 = 1.2.1 =
 
