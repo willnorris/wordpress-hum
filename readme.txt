@@ -165,6 +165,7 @@ Project maintined on github at [willnorris/wordpress-hum](https://github.com/wil
 [full changelog](https://github.com/willnorris/wordpress-hum/compare/1.1...1.2)
 
 = 1.1 =
+
  - allow custom domain to be configured using `HUM_SHORTLINK_BASE` constant or
    via the General Settings admin page.
  - strip some punctuation at the end of URLs (see [#4][])
@@ -187,11 +188,13 @@ Project maintined on github at [willnorris/wordpress-hum](https://github.com/wil
 [#wp180868]: https://wordpress.org/support/topic/causing-404-on-category-tag-pages/
 
 = 1.0 =
+
  - initial public release
 
 
 == Upgrade Notice ==
 
 = 1.1 =
+
 Adds a new admin UI for setting a custom domain for shortlinks, includes
 smarter URL matching, and adds various small improvements and bug fixes.
