@@ -3,7 +3,7 @@ Contributors: willnorris, pfefferle
 Tags: shortlink, whistle, diso
 Requires at least: 3.0
 Tested up to: 5.6
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -108,6 +108,12 @@ You can redirect all traffic for a prefix using a single line of PHP my implemen
 
 Project maintined on github at [willnorris/wordpress-hum](https://github.com/willnorris/wordpress-hum).
 
+= 1.2.7 =
+
+ - redirect only known types (see [#wp180868][])
+
+[full changelog](https://github.com/willnorris/wordpress-hum/compare/1.2.6...1.2.7)
+
 = 1.2.6 =
 
  - fix PHP 7.4 deprecation warning
@@ -159,6 +165,7 @@ Project maintined on github at [willnorris/wordpress-hum](https://github.com/wil
 [full changelog](https://github.com/willnorris/wordpress-hum/compare/1.1...1.2)
 
 = 1.1 =
+
  - allow custom domain to be configured using `HUM_SHORTLINK_BASE` constant or
    via the General Settings admin page.
  - strip some punctuation at the end of URLs (see [#4][])
@@ -178,13 +185,16 @@ Project maintined on github at [willnorris/wordpress-hum](https://github.com/wil
 [#4]: https://github.com/willnorris/wordpress-hum/issues/4
 [#6]: https://github.com/willnorris/wordpress-hum/issues/6
 [#17]: https://github.com/willnorris/wordpress-hum/pull/17
+[#wp180868]: https://wordpress.org/support/topic/causing-404-on-category-tag-pages/
 
 = 1.0 =
+
  - initial public release
 
 
 == Upgrade Notice ==
 
 = 1.1 =
+
 Adds a new admin UI for setting a custom domain for shortlinks, includes
 smarter URL matching, and adds various small improvements and bug fixes.
