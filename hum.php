@@ -5,7 +5,7 @@
  * Description: Personal URL shortener for WordPress
  * Author: Will Norris
  * Author URI: https://willnorris.com/
- * Version: 1.2.6
+ * Version: 1.2.7
  * License: MIT
  * License URI: http://opensource.org/licenses/MIT
  * Text Domain: hum
@@ -206,7 +206,10 @@ class Hum {
 	 * Add rewrite rules for hum shortlinks.
 	 */
 	public function rewrite_rules() {
-		add_rewrite_rule( '([a-z](\/.*)?$)', 'index.php?hum=$matches[1]', 'top' );
+		$local_types = $this->local_types();
+		$local_types = implode( '', $local_types );
+
+		add_rewrite_rule( "([{$local_types}i](\/.*)?$)", 'index.php?hum=$matches[1]', 'top' );
 	}
 
 	/**
