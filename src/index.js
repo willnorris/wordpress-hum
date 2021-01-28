@@ -32,7 +32,7 @@ const HumGutenbergShortlinkPanel = withState( {
 	</PluginDocumentSettingPanel>
 ) );
 
-registerPlugin( 'plugin-document-setting-panel-demo', {
+registerPlugin( 'hum-gutenberg-shortlink-panel', {
 	render: HumGutenbergShortlinkPanel,
 	icon: '',
 } );
