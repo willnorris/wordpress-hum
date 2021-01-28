@@ -10,11 +10,11 @@ import { withState } from '@wordpress/compose';
 const HumGutenbergShortlinkPanel = withState( {
 	hasCopied: false,
 } )( ( { hasCopied, setState } ) => (
-    <PluginDocumentSettingPanel
-        name="shortlink-panel"
-        title="Shortlink"
-        className="shortlink-panel"
-    >
+	<PluginDocumentSettingPanel
+		name="shortlink-panel"
+		title="Shortlink"
+		className="shortlink-panel"
+	>
 		<TextControl
 			label={ humEditorObject.inputLabel }
 			hideLabelFromVision="true"
@@ -29,10 +29,10 @@ const HumGutenbergShortlinkPanel = withState( {
 		>
 			{ hasCopied ? humEditorObject.copyButtonCopiedLabel : humEditorObject.copyButtonLabel }
 		</ClipboardButton>
-    </PluginDocumentSettingPanel>
+	</PluginDocumentSettingPanel>
 ) );
 
 registerPlugin( 'plugin-document-setting-panel-demo', {
-    render: HumGutenbergShortlinkPanel,
-    icon: '',
+	render: HumGutenbergShortlinkPanel,
+	icon: '',
 } );
