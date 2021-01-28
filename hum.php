@@ -82,7 +82,7 @@ class Hum {
 				'inputLabel'            => __( 'Shortlink', 'hum' ),
 				'copyButtonLabel'       => __( 'Copy link', 'hum' ),
 				'copyButtonCopiedLabel' => __( 'Copied!', 'hum' ),
-			),
+			)
 		);
 	}
 
