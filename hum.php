@@ -74,12 +74,16 @@ class Hum {
 	public function enqueue_block_editor_script() {
 		wp_enqueue_script( 'hum-editor-script' );
 
-		wp_localize_script( 'hum-editor-script', 'humEditorObject', [
-			'shortlink' => wp_get_shortlink(),
-			'inputLabel' => __( 'Shortlink', 'hum' ),
-			'copyButtonLabel' => __( 'Copy link', 'hum' ),
-			'copyButtonCopiedLabel' => __( 'Copied!', 'hum' ),
-		] );
+		wp_localize_script(
+			'hum-editor-script',
+			'humEditorObject',
+			array(
+				'shortlink'             => wp_get_shortlink(),
+				'inputLabel'            => __( 'Shortlink', 'hum' ),
+				'copyButtonLabel'       => __( 'Copy link', 'hum' ),
+				'copyButtonCopiedLabel' => __( 'Copied!', 'hum' ),
+			),
+		);
 	}
 
 	/**
