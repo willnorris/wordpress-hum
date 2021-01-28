@@ -16,6 +16,7 @@ class Hum {
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'init', array( $this, 'rewrite_rules' ) );
+		add_action( 'init', array( $this, 'register_editor_script' ) );
 
 		register_activation_hook( __FILE__, array( $this, 'flush_rewrite_rules' ) );
 		register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
@@ -41,6 +42,7 @@ class Hum {
 		add_filter( 'template_redirect', array( $this, 'legacy_redirect' ) );
 		add_filter( 'hum_legacy_id', array( $this, 'legacy_ftl_id' ), 10, 2 );
 		add_action( 'atom_entry', array( $this, 'shortlink_atom_entry' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_script' ) );
 
 		// Admin Settings
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -49,6 +51,35 @@ class Hum {
 		add_filter( 'manage_edit-page_columns', array( $this, 'add_post_column' ), 10, 1 );
 		add_action( 'manage_posts_custom_column', array( $this, 'add_posts_custom_column' ), 10, 2 );
 		add_action( 'manage_pages_custom_column', array( $this, 'add_posts_custom_column' ), 10, 2 );
+	}
+
+	/**
+	 * Register editor script.
+	 */
+	public function register_editor_script() {
+		// Load dependencies and version info.
+		$asset_info = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php' );
+
+		wp_register_script(
+			'hum-editor-script',
+			plugins_url( 'build/index.js', __FILE__ ),
+			$asset_info['dependencies'],
+			$asset_info['version']
+		);
+	}
+
+	/**
+	 * Enqueue editor script.
+	 */
+	public function enqueue_block_editor_script() {
+		wp_enqueue_script( 'hum-editor-script' );
+
+		wp_localize_script( 'hum-editor-script', 'humEditorObject', [
+			'shortlink' => wp_get_shortlink(),
+			'inputLabel' => __( 'Shortlink', 'hum' ),
+			'copyButtonLabel' => __( 'Copy link', 'hum' ),
+			'copyButtonCopiedLabel' => __( 'Copied!', 'hum' ),
+		] );
 	}
 
 	/**
