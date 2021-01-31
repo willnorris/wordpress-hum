@@ -6,3 +6,6 @@
 .editorconfig export-ignore
 phpcs.xml export-ignore
 docker-compose.yml export-ignore
+src export-ignore
+package.json export-ignore
+package-lock.json export-ignore

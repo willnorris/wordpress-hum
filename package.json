@@ -1,0 +1,13 @@
+{
+  "name": "hum",
+  "version": "1.2.8",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start"
+  },
+  "author": "Will Norris",
+  "license": "MIT",
+  "dependencies": {
+    "@wordpress/scripts": "^13.0.0"
+  }
+}
