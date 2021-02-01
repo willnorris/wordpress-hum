@@ -75,7 +75,7 @@ If you'd like to include your Amazone Affiliate ID in the `/i/` redirect URLs, i
 
 = Additional Local Types =
 
-Out of the box, Hum only registers the `b` and `t` prefix to be served locally by WordPress.  If you would like to register additional prefixes, implement the `hum_local_types` filter.  For example, to include 'p' as well for photos:
+Out of the box, Hum only registers the `b`, `t`, `a` and `p` prefix to be served locally by WordPress.  If you would like to register additional prefixes, implement the `hum_local_types` filter.  For example, to include 'p' as well for photos:
 
     function myplugin_hum_local_types( $types ) {
       $types[] = 'p';
