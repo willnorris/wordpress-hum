@@ -2,9 +2,9 @@
 Contributors: willnorris, pfefferle
 Tags: shortlink, whistle, diso
 Requires at least: 3.0
-Tested up to: 5.6
+Tested up to: 5.7
 Stable tag: 1.2.8
-Requires PHP: 5.7
+Requires PHP: 5.6
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
