@@ -159,6 +159,18 @@ class Hum {
 	}
 
 	/**
+	 * Get the short URL types that shoud be redirected (types can be the same as local types).
+	 *
+	 * @uses apply_filters() Calls 'hum_redirect_types' with array of redirect types
+	 *
+	 * @return array redirect types
+	 */
+	public function redirect_types() {
+		$redirect_types = array( 'i' );
+		return apply_filters( 'hum_redirect_types', $redirect_types );
+	}
+
+	/**
 	 * Attempt to handle redirect for the current shortlink.
 	 *
 	 * This redirects shortlinks that are for content hosted directly within
@@ -242,9 +254,12 @@ class Hum {
 	 */
 	public function rewrite_rules() {
 		$local_types = $this->local_types();
-		$local_types = implode( '', $local_types );
+		$redirect_types = $this->redirect_types();
 
-		add_rewrite_rule( "([{$local_types}i](\/.*)?$)", 'index.php?hum=$matches[1]', 'top' );
+		$types = array_merge( $local_types, $redirect_types );
+		$types = implode( '', array_unique( $types ) );
+
+		add_rewrite_rule( "([{$types}](\/.*)?$)", 'index.php?hum=$matches[1]', 'top' );
 	}
 
 	/**
