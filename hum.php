@@ -15,7 +15,7 @@ class Hum {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'init', array( $this, 'rewrite_rules' ) );
+		add_action( 'init', array( $this, 'rewrite_rules' ), 15 );
 		add_action( 'init', array( $this, 'register_editor_script' ) );
 
 		register_activation_hook( __FILE__, array( $this, 'flush_rewrite_rules' ) );
