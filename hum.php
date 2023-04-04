@@ -182,8 +182,7 @@ class Hum {
 	 * prefix. For example, to redirect all /w/ shortlinks to your personal
 	 * PBworks wiki, you could use:
 	 *
-	 *     add_filter('hum_redirect_base_w',
-	 *         create_function('', 'return "http://willnorris.pbworks.com/";'));
+	 *     add_filter('hum_redirect_base_w', fn() => "http://willnorris.pbworks.com/");
 	 *
 	 * @uses apply_filters() Calls 'hum_redirect_{$type}' action
 	 * @uses apply_filters() Calls 'hum_redirect_base_{$type}' filter on redirect base URL

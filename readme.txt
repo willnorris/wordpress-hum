@@ -71,7 +71,7 @@ Additional type prefixes can be registered to serve WordPress hosted content or 
 
 If you'd like to include your Amazone Affiliate ID in the `/i/` redirect URLs, implement the `amazon_affiliate_id` filter.  For example:
 
-    add_filter('amazon_affiliate_id', create_function('', 'return "willnorris-20";'));
+    add_filter('amazon_affiliate_id', fn() => "willnorris-20");
 
 = Additional Local Types =
 
@@ -101,8 +101,7 @@ This will tell Hum to serve any `/p/{id}` URLs from WordPress.  Additionally, yo
 
 You can redirect all traffic for a prefix using a single line of PHP my implementing the `hum_redirect_base_{type}` filter where `{type}` is the prefix to redirect.  For example, I redirect all `/w/` URLs to wiki.willnorris.com using:
 
-    add_filter('hum_redirect_base_w',
-      create_function('', 'return "http://wiki.willnorris.com/";'));
+    add_filter('hum_redirect_base_w', fn() => "http://wiki.willnorris.com/");
 
 
 == Changelog ==
