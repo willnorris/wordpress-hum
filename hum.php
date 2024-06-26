@@ -317,7 +317,7 @@ class Hum {
 			} elseif ( is_singular() ) {
 				$post_id = get_queried_object_id();
 			}
-		} elseif ( 'post' === $context && $id > 0 ) {
+		} elseif ( 'post' === $context && (int) $id > 0 ) {
 			$post = get_post( $id );
 
 			if ( $post instanceof WP_Post ) {
