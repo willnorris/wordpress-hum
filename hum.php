@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 /**
  * Plugin Name: Hum
  * Plugin URI: https://github.com/willnorris/wordpress-hum
@@ -463,7 +463,7 @@ class Hum {
 		<input name="hum_shortlink_base" type="text" id="hum_shortlink_base"
 				value="<?php form_option( 'hum_shortlink_base' ); ?>"
 				<?php disabled( defined( 'HUM_SHORTLINK_BASE' ) ); ?>
-				class="regular-text code<?php if ( defined( 'HUM_SHORTLINK_BASE' ) ) { echo ' disabled'; } ?>" />
+				class="regular-text code<?php if ( defined( 'HUM_SHORTLINK_BASE' ) ) { echo ' disabled'; } // phpcs:ignore Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace ?>" />
 		<p class="description">
 			<?php _e( 'If you have a custom domain you want to use for shortlinks, enter the address here.', 'hum' ); ?>
 		</p>
