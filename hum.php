@@ -26,7 +26,7 @@ class Hum {
 	 * Initialize the plugin, registering WordPress hooks.
 	 */
 	public function init() {
-		load_plugin_textdomain( 'hum', null, basename( dirname( __FILE__ ) ) );
+		load_plugin_textdomain( 'hum', null, basename( __DIR__ ) );
 
 		// if you have hum installed, then you probably actually care about short
 		// links, so we'll add it to the admin menu bar.
@@ -58,7 +58,7 @@ class Hum {
 	 */
 	public function register_editor_script() {
 		// Load dependencies and version info.
-		$asset_info = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php' );
+		$asset_info = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
 		wp_register_script(
 			'hum-editor-script',
@@ -252,7 +252,7 @@ class Hum {
 	 * Add rewrite rules for hum shortlinks.
 	 */
 	public function rewrite_rules() {
-		$local_types = $this->local_types();
+		$local_types    = $this->local_types();
 		$redirect_types = $this->redirect_types();
 
 		$types = array_merge( $local_types, $redirect_types );
@@ -515,7 +515,7 @@ class Hum {
 	}
 }
 
-new Hum;
+new Hum();
 
 
 // New Base 60 - see http://ttk.me/w/NewBase60
