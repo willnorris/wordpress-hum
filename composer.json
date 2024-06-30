@@ -1,0 +1,39 @@
+{
+	"name": "willnorris/wordpress-hum",
+	"description": "Personal URL shortener for WordPress",
+	"require": {
+	  "php": ">=5.6.0",
+	  "composer/installers": "^1.0 || ^2.0"
+	},
+	"type": "wordpress-plugin",
+	"license": "MIT",
+	"authors": [
+	  {
+		"name": "Will Norris",
+		"homepage": "https://willnorris.com/"
+	  },
+	  {
+		"name": "Matthias Pfefferle",
+		"homepage": "https://notiz.blog/"
+	  }
+	],
+	"extra": {
+	  "installer-name": "hum"
+	},
+	"require-dev": {
+	  "phpcompatibility/php-compatibility": "*",
+	  "phpcompatibility/phpcompatibility-wp": "*",
+	  "squizlabs/php_codesniffer": "3.*",
+	  "wp-coding-standards/wpcs": "*",
+	  "dealerdirect/phpcodesniffer-composer-installer": "^1.0.0"
+	},
+	"scripts": {
+	  "lint": "./vendor/bin/phpcs -n -q"
+	},
+	"config": {
+	  "allow-plugins": {
+		"dealerdirect/phpcodesniffer-composer-installer": true,
+		"composer/installers": true
+	  }
+	}
+  }

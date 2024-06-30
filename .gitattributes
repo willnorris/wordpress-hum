@@ -7,5 +7,7 @@
 phpcs.xml export-ignore
 docker-compose.yml export-ignore
 src export-ignore
+composer.json export-ignore
+composer.lock export-ignore
 package.json export-ignore
 package-lock.json export-ignore
