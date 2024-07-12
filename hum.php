@@ -311,16 +311,12 @@ class Hum {
 	 */
 	public function get_shortlink( $link, $id, $context, $allow_slugs ) {
 		$post_id = 0;
-		if ( 'query' === $context ) {
-			if ( is_front_page() ) {
-				$link = trailingslashit( $this->shortlink_base() );
-			} elseif ( is_singular() ) {
-				$post_id = get_queried_object_id();
-			}
-		} elseif ( 'post' === $context && (int) $id > 0 ) {
+		if ( 'query' === $context && is_singular() ) {
+			$post_id = get_queried_object_id();
+			$post    = get_post( $post_id );
+		} elseif ( 'post' === $context ) {
 			$post = get_post( $id );
-
-			if ( $post instanceof WP_Post ) {
+			if ( ! empty( $post->ID ) ) {
 				$post_id = $post->ID;
 			}
 		}
