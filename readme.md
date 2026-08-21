@@ -3,7 +3,7 @@
 - Contributors: willnorris, pfefferle
 - Tags: shortlink, whistle, diso
 - Requires at least: 3.0
-- Tested up to: 7.0
+- Tested up to: 7.1
 - Stable tag: 1.3.6
 - Requires PHP: 7.4
 - License: MIT
