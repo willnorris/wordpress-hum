@@ -3,7 +3,7 @@
   "author": "Will Norris",
   "license": "MIT",
   "dependencies": {
-    "@wordpress/scripts": "^34.1.0"
+    "@wordpress/scripts": "^34.2.0"
   },
   "devDependencies": {
     "@wordpress/env": "^11.13.0"
