@@ -7,12 +7,51 @@
 
 class Hum {
 
-	public function __construct() {
+	/**
+	 * The one instance the bootstrap keeps around.
+	 *
+	 * @var Hum|null
+	 */
+	private static $instance = null;
+
+	/**
+	 * Boot the plugin and register its hooks.
+	 *
+	 * Called on `plugins_loaded` from the main plugin file. Safe to call more
+	 * than once, the hooks are only registered for the first instance.
+	 *
+	 * @return Hum The plugin instance.
+	 */
+	public static function bootstrap() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+			self::$instance->register_hooks();
+		}
+
+		return self::$instance;
+	}
+
+	/**
+	 * Register the hooks the plugin runs on.
+	 */
+	public function register_hooks() {
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'init', array( $this, 'rewrite_rules' ), 15 );
+	}
 
-		register_activation_hook( HUM_PLUGIN_FILE, array( $this, 'flush_rewrite_rules' ) );
-		register_deactivation_hook( HUM_PLUGIN_FILE, 'flush_rewrite_rules' );
+	/**
+	 * Flush the rewrite rules on activation, so hum shortlinks resolve right away.
+	 */
+	public static function activate() {
+		$hum = new self();
+		$hum->flush_rewrite_rules();
+	}
+
+	/**
+	 * Flush the rewrite rules on deactivation, to drop the hum rules again.
+	 */
+	public static function deactivate() {
+		flush_rewrite_rules();
 	}
 
 	/**

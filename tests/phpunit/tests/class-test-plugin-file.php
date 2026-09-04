@@ -55,7 +55,7 @@ class Test_Plugin_File extends \WP_UnitTestCase {
 	 */
 	public function test_activation_hook_hangs_off_the_main_plugin_file() {
 		$this->assertNotFalse(
-			has_action( 'activate_' . plugin_basename( HUM_PLUGIN_FILE ) ),
+			has_action( 'activate_' . plugin_basename( HUM_PLUGIN_FILE ), array( 'Hum', 'activate' ) ),
 			'No activation hook registered for the main plugin file.'
 		);
 
@@ -71,12 +71,12 @@ class Test_Plugin_File extends \WP_UnitTestCase {
 	 */
 	public function test_deactivation_hook_hangs_off_the_main_plugin_file() {
 		$this->assertNotFalse(
-			has_action( 'deactivate_' . plugin_basename( HUM_PLUGIN_FILE ), 'flush_rewrite_rules' )
+			has_action( 'deactivate_' . plugin_basename( HUM_PLUGIN_FILE ), array( 'Hum', 'deactivate' ) )
 		);
 
 		$class_file = dirname( HUM_PLUGIN_FILE ) . '/includes/class-hum.php';
 		$this->assertFalse(
-			has_action( 'deactivate_' . plugin_basename( $class_file ), 'flush_rewrite_rules' )
+			has_action( 'deactivate_' . plugin_basename( $class_file ), array( 'Hum', 'deactivate' ) )
 		);
 	}
 
@@ -102,6 +102,23 @@ class Test_Plugin_File extends \WP_UnitTestCase {
 			basename( $paths['hum'] ),
 			'The textdomain path must point at the plugin directory.'
 		);
+	}
+
+	/**
+	 * The plugin boots through Hum::bootstrap(), not a bare `new Hum()`.
+	 *
+	 * Repeated calls must hand back the same instance, so the `init` hooks are
+	 * only ever registered once.
+	 */
+	public function test_bootstrap_is_idempotent() {
+		$first  = \Hum::bootstrap();
+		$second = \Hum::bootstrap();
+
+		$this->assertInstanceOf( \Hum::class, $first );
+		$this->assertSame( $first, $second );
+
+		$this->assertSame( 10, has_action( 'init', array( $first, 'init' ) ) );
+		$this->assertSame( 15, has_action( 'init', array( $first, 'rewrite_rules' ) ) );
 	}
 
 	/**
