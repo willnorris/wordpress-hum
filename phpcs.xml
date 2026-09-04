@@ -19,12 +19,4 @@
 	<arg name="parallel" value="50"/>
 
 	<rule ref="WordPress-Core"/>
-
-	<!-- Test classes are not shipped and follow the WP test-suite conventions. -->
-	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
-		<exclude-pattern>tests/*</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.WP.GlobalVariablesOverride">
-		<exclude-pattern>tests/*</exclude-pattern>
-	</rule>
 </ruleset>
