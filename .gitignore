@@ -4,3 +4,4 @@ vendor/
 .vscode/settings.json
 
 .phpunit.result.cache
+composer.lock
