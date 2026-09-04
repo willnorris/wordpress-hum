@@ -55,7 +55,7 @@ class Test_Plugin_File extends \WP_UnitTestCase {
 	 */
 	public function test_activation_hook_hangs_off_the_main_plugin_file() {
 		$this->assertNotFalse(
-			has_action( 'activate_' . plugin_basename( HUM_PLUGIN_FILE ), array( 'Hum', 'activate' ) ),
+			has_action( 'activate_' . plugin_basename( HUM_PLUGIN_FILE ), array( \Hum::class, 'activate' ) ),
 			'No activation hook registered for the main plugin file.'
 		);
 
@@ -71,12 +71,12 @@ class Test_Plugin_File extends \WP_UnitTestCase {
 	 */
 	public function test_deactivation_hook_hangs_off_the_main_plugin_file() {
 		$this->assertNotFalse(
-			has_action( 'deactivate_' . plugin_basename( HUM_PLUGIN_FILE ), array( 'Hum', 'deactivate' ) )
+			has_action( 'deactivate_' . plugin_basename( HUM_PLUGIN_FILE ), array( \Hum::class, 'deactivate' ) )
 		);
 
 		$class_file = dirname( HUM_PLUGIN_FILE ) . '/includes/class-hum.php';
 		$this->assertFalse(
-			has_action( 'deactivate_' . plugin_basename( $class_file ), array( 'Hum', 'deactivate' ) )
+			has_action( 'deactivate_' . plugin_basename( $class_file ), array( \Hum::class, 'deactivate' ) )
 		);
 	}
 
