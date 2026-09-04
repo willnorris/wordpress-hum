@@ -410,10 +410,32 @@ class Hum {
 	 * @return string ID of post to redirect to.
 	 */
 	public function legacy_ftl_id( $id, $path ) {
+		/**
+		 * Filters whether Hum resolves legacy Friendly Twitter Links shortlinks.
+		 *
+		 * These are bare base-10 or base-32 post IDs used as the request path.
+		 * Sites that never used FTL shortlinks can disable this to stop Hum from
+		 * decoding arbitrary 404 URLs into post IDs and redirecting to them.
+		 *
+		 * @param bool $enabled Whether to resolve legacy FTL shortlinks. Default true.
+		 */
+		if ( ! apply_filters( 'hum_enable_legacy_ftl', true ) ) {
+			return $id;
+		}
+
 		if ( is_numeric( $path ) ) {
 			$post = get_post( $path );
 		} else {
-			$post_id = base_convert( preg_replace( '/[^0-9a-fA-F]/', '', $path ), 32, 10 );
+			$base32 = preg_replace( '/[^0-9a-fA-F]/', '', $path );
+
+			// A base-32 post ID is never wider than PHP_INT_MAX (13 characters).
+			// Anything longer cannot be a valid ID and overflows base_convert() to
+			// INF, which throws a ValueError on PHP 8, so bail before converting.
+			if ( '' === $base32 || strlen( $base32 ) > 13 ) {
+				return $id;
+			}
+
+			$post_id = base_convert( $base32, 32, 10 );
 			$post    = get_post( $post_id );
 		}
 
