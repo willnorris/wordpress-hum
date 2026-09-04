@@ -13,6 +13,7 @@
     "start": "wp-scripts start",
     "env:start": "wp-env start",
     "env:stop": "wp-env stop",
-    "env:destroy": "wp-env destroy"
+    "env:destroy": "wp-env destroy",
+    "env:test": "wp-env run tests-cli --env-cwd=\"wp-content/plugins/hum\" vendor/bin/phpunit"
   }
 }
