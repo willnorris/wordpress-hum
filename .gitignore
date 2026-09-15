@@ -2,3 +2,4 @@ node_modules/
 package-lock.json
 vendor/
 .vscode/settings.json
+.phpunit.result.cache
